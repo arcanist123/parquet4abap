@@ -15,27 +15,60 @@ The goal of **parquet4abap** is to read and write Parquet files directly in ABAP
 
 | Area | Status |
 |------|--------|
-| File structure (magic bytes, footer, row groups, column chunks, pages) | Planned |
+| File structure (magic bytes, footer, row groups, column chunks, pages) | Writing done, reading planned |
 | Thrift Compact Protocol (file metadata, page headers) | Done |
-| Encodings: PLAIN, RLE / bit-packing hybrid, dictionary | Planned |
-| Compression: uncompressed, GZIP | Planned |
+| Encodings: PLAIN, RLE / bit-packing hybrid (definition levels) | Writing done, reading planned |
+| Encodings: dictionary | Planned |
+| Compression: uncompressed, GZIP | Writing done, reading planned |
 | Compression: Snappy, ZSTD | Under consideration |
-| Flat schemas | Planned |
-| Nested schemas (repetition / definition levels) | Under consideration |
+| Flat schemas, optional columns | Writing done, reading planned |
+| Nested schemas (repetition levels) | Under consideration |
 
-## Type mapping (draft)
+## Type mapping
 
-| Parquet type | ABAP type |
-|--------------|-----------|
-| BOOLEAN | `abap_bool` |
-| INT32 | `i` / `int4` |
-| INT64 | `int8` |
-| FLOAT / DOUBLE | `f` |
-| BYTE_ARRAY (STRING) | `string` |
-| BYTE_ARRAY | `xstring` |
-| INT32 (DATE) | `d` |
-| INT64 (TIMESTAMP) | `timestampl` |
-| FIXED_LEN_BYTE_ARRAY / INT (DECIMAL) | `p` (packed) |
+The writer maps each component of the table's line type to a column, named like the
+component in lower case:
+
+| ABAP type | Parquet physical type | Logical type |
+|-----------|-----------------------|--------------|
+| `i` | INT32 | |
+| `int8` | INT64 | |
+| `b` (`int1`) | INT32 | INTEGER(8, unsigned) |
+| `s` (`int2`) | INT32 | INTEGER(16, signed) |
+| `f` | DOUBLE | |
+| `p` with up to 9 / 18 / 31 digits | INT32 / INT64 / FIXED_LEN_BYTE_ARRAY | DECIMAL(2 × length − 1, decimals) |
+| `abap_bool` | BOOLEAN | |
+| `c`, `n`, `string` | BYTE_ARRAY, UTF-8 | STRING |
+| `x` | FIXED_LEN_BYTE_ARRAY | |
+| `xstring` | BYTE_ARRAY | |
+| `d` | INT32, days since 1970-01-01 | DATE |
+| `t` | INT32, milliseconds since midnight | TIME(MILLIS), not adjusted to UTC |
+
+A component typed as a data reference to one of these types (`REF TO i`, `REF TO string`, ...) is an
+optional column: an unbound reference is written as null. All other columns are required. As
+ABAP assigns them, `c` values lose their trailing blanks, and `n` values keep their leading zeros.
+
+## Writing a file
+
+```abap
+TYPES:
+  BEGIN OF ty_row,
+    id    TYPE i,
+    name  TYPE string,
+    score TYPE REF TO f,     " optional: unbound means null
+  END OF ty_row.
+DATA rows TYPE STANDARD TABLE OF ty_row WITH EMPTY KEY.
+
+rows = VALUE #( ( id = 1 name = `alpha` score = NEW #( '0.5' ) )
+                ( id = 2 name = `beta` ) ).
+
+DATA(writer) = NEW zparq2a_cl_writer( NEW zparq2a_cl_comp_gzip( ) ).
+writer->set_column_compressor( column = `ID` compressor = NEW zparq2a_cl_comp_none( ) ).
+DATA(file) = writer->write( rows ).    " xstring with the Parquet file
+```
+
+The file has one row group with one data page per column (data page v1, PLAIN values). Without
+a compressor the writer stores pages uncompressed. GZIP uses `CL_ABAP_GZIP`.
 
 ## Installation
 
@@ -81,6 +114,26 @@ python -m venv tools/.venv
 tools/.venv/Scripts/pip install -r tools/golden/requirements.txt   # Linux, macOS: tools/.venv/bin/pip
 tools/.venv/Scripts/python tools/golden/generate.py
 ```
+
+## Checking the writer
+
+`ZPARQ2A_CL_SAMPLES` writes fixed datasets: every supported type with edge values, optional
+columns with nulls, an empty table, and a GZIP file. `tools/write-samples.mjs` writes them to
+`results/samples/` with the code the abaplint transpiler built, and `tools/writer/check.py`
+has pyarrow and DuckDB read them and compares the schema and every value with its own
+description of the datasets:
+
+```sh
+npm run unit
+npm run samples
+tools/.venv/Scripts/python tools/writer/check.py results/samples --toolchain abaplint-transpiler
+```
+
+Samples listed in `tools/known-gaps.json` as `SAMPLES/<name>` fail for a known reason and are
+reported as `KNOWN`. With `--update`, the uncompressed samples that pass go to
+`testdata/written/` and into `src/zparq2a_cl_written.clas.abap`. A unit test checks that the
+writer gives exactly these bytes, so every toolchain is held to the files that pyarrow and
+DuckDB read correctly.
 
 ## Status
 

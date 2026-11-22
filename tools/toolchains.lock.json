@@ -2,12 +2,12 @@
   "abaplint-transpiler": {
     "repo": "https://github.com/arcanist123/transpiler",
     "branch": "parquet4abap",
-    "commit": "1ff51315df8880780b066ff767b7395c5eb24d24",
+    "commit": "c55735b8bd6720e0334d174496e4efa4f7770b0d",
     "upstream": "https://github.com/abaplint/transpiler",
     "unmergedPullRequests": [
       "https://github.com/abaplint/transpiler/pull/2151",
-      "https://github.com/abaplint/transpiler/pull/2233",
-      "https://github.com/abaplint/transpiler/pull/2237"
+      "https://github.com/abaplint/transpiler/pull/2237",
+      "https://github.com/abaplint/transpiler/pull/2240"
     ]
   },
   "open-steamgate": {

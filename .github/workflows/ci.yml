@@ -22,9 +22,20 @@ jobs:
           key: transpiler-${{ hashFiles('tools/toolchains.lock.json') }}
       - name: ABAP Unit on the abaplint transpiler
         run: npm run unit
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pyarrow and DuckDB
+        run: pip install -r tools/golden/requirements.txt
+      - name: Write the sample files on the abaplint transpiler
+        run: npm run samples
+      - name: Read them with pyarrow and DuckDB
+        run: python tools/writer/check.py results/samples --toolchain abaplint-transpiler
       - name: Keep the result
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: transpiler-unit
-          path: results/transpiler-unit.json
+          path: |
+            results/transpiler-unit.json
+            results/samples/
