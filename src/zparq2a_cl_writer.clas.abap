@@ -261,7 +261,6 @@ CLASS zparq2a_cl_writer IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD put_value.
-    CONSTANTS epoch TYPE d VALUE '19700101'.
     CONSTANTS midnight TYPE t VALUE '000000'.
     DATA text TYPE string.
     DATA date TYPE d.
@@ -274,7 +273,7 @@ CLASS zparq2a_cl_writer IMPLEMENTATION.
         encoder->put( zparq2a_cl_bytes=>utf8_encode( text ) ).
       WHEN cl_abap_typedescr=>typekind_date.
         date = value.
-        encoder->put( date - epoch ).
+        encoder->put( zparq2a_cl_schema=>days_from_date( date ) ).
       WHEN cl_abap_typedescr=>typekind_time.
         time = value.
         encoder->put( ( time - midnight ) * 1000 ).

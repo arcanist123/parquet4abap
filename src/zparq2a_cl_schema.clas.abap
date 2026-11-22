@@ -46,6 +46,27 @@ CLASS zparq2a_cl_schema DEFINITION
       RETURNING
         VALUE(result) TYPE zparq2a_if_format=>ty_schema_elements.
 
+    "! Days since 1970-01-01 in the proleptic Gregorian calendar, as Parquet DATE counts them.
+    "! ABAP date arithmetic is expected to count days before 1582-10-15 in the Julian calendar, so it is not used.
+    "! @raising zparq2a_cx_error | DATE is not a valid date
+    CLASS-METHODS days_from_date
+      IMPORTING
+        date          TYPE d
+      RETURNING
+        VALUE(result) TYPE i
+      RAISING
+        zparq2a_cx_error.
+
+    "! The date DAYS after 1970-01-01, in the proleptic Gregorian calendar
+    "! @raising zparq2a_cx_error | the date is outside 0001-01-01 .. 9999-12-31
+    CLASS-METHODS date_from_days
+      IMPORTING
+        days          TYPE int8
+      RETURNING
+        VALUE(result) TYPE d
+      RAISING
+        zparq2a_cx_error.
+
     "! Bytes FIXED_LEN_BYTE_ARRAY needs for a signed DECIMAL of PRECISION digits
     CLASS-METHODS decimal_length
       IMPORTING
@@ -257,6 +278,72 @@ CLASS zparq2a_cl_schema IMPLEMENTATION.
       result = result + 1.
       limit = limit * 256.
     ENDWHILE.
+  ENDMETHOD.
+
+  METHOD days_from_date.
+    " days_from_civil of http://howardhinnant.github.io/date_algorithms.html
+    DATA year TYPE i.
+    DATA month TYPE i.
+    DATA day TYPE i.
+
+    IF date CN '0123456789'.
+      RAISE EXCEPTION TYPE zparq2a_cx_error
+        EXPORTING
+          text = |{ date } is not a valid date|.
+    ENDIF.
+    year = date(4).
+    month = date+4(2).
+    day = date+6(2).
+    IF year < 1 OR month < 1 OR month > 12 OR day < 1 OR day > 31.
+      RAISE EXCEPTION TYPE zparq2a_cx_error
+        EXPORTING
+          text = |{ date } is not a valid date|.
+    ENDIF.
+
+    " the year starts on March 1st, so the leap day comes last
+    IF month <= 2.
+      year = year - 1.
+      month = month + 9.
+    ELSE.
+      month = month - 3.
+    ENDIF.
+    DATA(era) = year DIV 400.
+    DATA(year_of_era) = year - era * 400.
+    DATA(day_of_year) = ( 153 * month + 2 ) DIV 5 + day - 1.
+    DATA(day_of_era) = year_of_era * 365 + year_of_era DIV 4 - year_of_era DIV 100 + day_of_year.
+    result = era * 146097 + day_of_era - 719468.
+  ENDMETHOD.
+
+  METHOD date_from_days.
+    " civil_from_days of http://howardhinnant.github.io/date_algorithms.html
+    CONSTANTS first_day TYPE int8 VALUE -719162.
+    CONSTANTS last_day TYPE int8 VALUE 2932896.
+    DATA year TYPE n LENGTH 4.
+    DATA month TYPE n LENGTH 2.
+    DATA day TYPE n LENGTH 2.
+
+    IF days < first_day OR days > last_day.
+      RAISE EXCEPTION TYPE zparq2a_cx_error
+        EXPORTING
+          text = |{ days } days after 1970-01-01 is outside 0001-01-01 .. 9999-12-31|.
+    ENDIF.
+    " days since 0000-03-01
+    DATA(shifted) = CONV i( days + 719468 ).
+    DATA(era) = shifted DIV 146097.
+    DATA(day_of_era) = shifted - era * 146097.
+    DATA(year_of_era) = ( day_of_era - day_of_era DIV 1460 + day_of_era DIV 36524 - day_of_era DIV 146096 ) DIV 365.
+    DATA(day_of_year) = day_of_era - ( 365 * year_of_era + year_of_era DIV 4 - year_of_era DIV 100 ).
+    " months from March
+    DATA(month_index) = ( 5 * day_of_year + 2 ) DIV 153.
+    day = day_of_year - ( 153 * month_index + 2 ) DIV 5 + 1.
+    IF month_index < 10.
+      month = month_index + 3.
+      year = year_of_era + era * 400.
+    ELSE.
+      month = month_index - 9.
+      year = year_of_era + era * 400 + 1.
+    ENDIF.
+    CONCATENATE year month day INTO result.
   ENDMETHOD.
 
   METHOD set_type.

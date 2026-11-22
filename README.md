@@ -15,13 +15,14 @@ The goal of **parquet4abap** is to read and write Parquet files directly in ABAP
 
 | Area | Status |
 |------|--------|
-| File structure (magic bytes, footer, row groups, column chunks, pages) | Writing done, reading planned |
+| File structure (magic bytes, footer, row groups, column chunks, pages) | Done |
 | Thrift Compact Protocol (file metadata, page headers) | Done |
-| Encodings: PLAIN, RLE / bit-packing hybrid (definition levels) | Writing done, reading planned |
+| Encodings: PLAIN, RLE / bit-packing hybrid (definition levels) | Done |
 | Encodings: dictionary | Planned |
-| Compression: uncompressed, GZIP | Writing done, reading planned |
+| Compression: uncompressed, GZIP | Done |
 | Compression: Snappy, ZSTD | Under consideration |
-| Flat schemas, optional columns | Writing done, reading planned |
+| Flat schemas, optional columns | Done |
+| Data pages v2, several row groups and pages per column | Reading done, writing planned |
 | Nested schemas (repetition levels) | Under consideration |
 
 ## Type mapping
@@ -48,6 +49,10 @@ A component typed as a data reference to one of these types (`REF TO i`, `REF TO
 optional column: an unbound reference is written as null. All other columns are required. As
 ABAP assigns them, `c` values lose their trailing blanks, and `n` values keep their leading zeros.
 
+Dates count days in the proleptic Gregorian calendar, as Parquet readers such as pyarrow do, also
+before 1582-10-15, where ABAP date arithmetic is expected to use the Julian calendar. The initial
+date `00000000` is not a valid date and raises an error.
+
 ## Writing a file
 
 ```abap
@@ -69,6 +74,38 @@ DATA(file) = writer->write( rows ).    " xstring with the Parquet file
 
 The file has one row group with one data page per column (data page v1, PLAIN values). Without
 a compressor the writer stores pages uncompressed. GZIP uses `CL_ABAP_GZIP`.
+
+## Reading a file
+
+```abap
+DATA rows TYPE STANDARD TABLE OF ty_row WITH EMPTY KEY.
+
+NEW zparq2a_cl_reader( )->read( EXPORTING file = file IMPORTING data = rows ).
+```
+
+The line type says which columns to read: each component is filled from the column with the same
+name, ignoring case, and columns it does not name are skipped. A component typed as a data
+reference reads an optional column, and a null leaves the reference unbound; a null in any other
+component is an error. Any table kind works; a duplicate key is an error.
+
+Values are converted to the component's type as far as no information is lost:
+
+| ABAP type | Parquet columns it reads |
+|-----------|--------------------------|
+| `i`, `int8`, `b`, `s` | INT32, INT64, also unsigned and other logical types such as TIMESTAMP (the stored number); the value must fit |
+| `f` | INT32, INT64, FLOAT, DOUBLE |
+| `p` | DECIMAL in any physical type, INT32, INT64; rounded to the component's decimals |
+| `abap_bool` | BOOLEAN |
+| `c`, `n`, `string` | UTF-8 text (STRING, ENUM, JSON); the text must fit |
+| `x` | binary values of exactly its length |
+| `xstring` | BYTE_ARRAY, FIXED_LEN_BYTE_ARRAY |
+| `d` | DATE |
+| `t` | TIME in milliseconds, microseconds or nanoseconds, whole seconds only |
+
+The reader takes data pages v1 and v2, several row groups and several pages per column. Values must
+be PLAIN (or RLE for booleans, as pyarrow writes them in data pages v2); dictionary encoding is
+not supported yet, and nor are nested schemas. Pages may be uncompressed or GZIP;
+`set_compressor( )` adds a codec.
 
 ## Installation
 
@@ -108,7 +145,8 @@ native Windows. On Windows the runner adds the workarounds in `tools/osg-win-pat
 ## Golden files
 
 `testdata/golden/` holds small Parquet files written by pyarrow and DuckDB, each with a JSON file that
-says what pyarrow reads from it. `tools/golden/generate.py` writes them, and also writes
+says what pyarrow reads from it. The reader's unit tests read the PLAIN-encoded ones into internal
+tables and compare every value. `tools/golden/generate.py` writes them, and also writes
 `src/zparq2a_cl_golden.clas.abap`, a class for tests only that embeds the files, so the ABAP Unit
 tests need no file access. To regenerate them with the versions pinned in
 `tools/golden/requirements.txt`:
