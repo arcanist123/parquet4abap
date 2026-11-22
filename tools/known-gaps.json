@@ -1,7 +1,6 @@
 {
   "abaplint-transpiler": {
     "ZPARQ2A_CL_SCHEMA/LTCL_SCHEMA/FLAT_TYPES": "https://github.com/abaplint/transpiler/issues/2199 (b and s run as i, RTTI gives type kind I)",
-    "ZPARQ2A_CL_SCHEMA/LTCL_SCHEMA/UNSUPPORTED_LINE_TYPES": "https://github.com/open-abap/open-abap-core/issues/1346 (referenced type of REF TO data is not a CL_ABAP_ELEMDESCR)",
     "ZPARQ2A_CL_WRITER/LTCL_WRITER/CONVERTED_VALUES": "https://github.com/abaplint/transpiler/issues/2167 (arithmetic with p operands loses digits above 2^53)",
     "SAMPLES/flat_none": "https://github.com/abaplint/transpiler/issues/2199 (b and s written as INT32 without a logical type), also #2167 (DECIMAL(31) loses digits)",
     "SAMPLES/empty_none": "https://github.com/abaplint/transpiler/issues/2199 (b and s written as INT32 without a logical type)",
