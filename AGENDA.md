@@ -85,7 +85,8 @@ we write can be checked with independent tools such as pyarrow or DuckDB.
 The same library source, with its ABAP Unit tests, must run unchanged on four toolchains:
 
 1. **ABAP platform**: the library installed with abapGit
-2. **abaplint transpiler** ([abaplint/transpiler](https://github.com/abaplint/transpiler)), from npm
+2. **abaplint transpiler** ([abaplint/transpiler](https://github.com/abaplint/transpiler)), built from
+   its Git repository at a pinned commit, so fixes can be tried before they are released
 3. **open-steamgate, JavaScript path** ([oisee/open-steamgate](https://github.com/oisee/open-steamgate),
    `npm run osgjs:unit`): its own pinned forks of the transpiler and open-abap-core, so results
    can differ from toolchain 2
