@@ -48,9 +48,7 @@ The ABAP Unit tests in `src/` run outside an ABAP system on these toolchains:
 | Command | Toolchain | Needs |
 |---------|-----------|-------|
 | `npm test` | abaplint, then the abaplint transpiler | Node, Git |
-| `npm run osg:go` | open-steamgate, Go path | Node, Go, Git |
-| `npm run osg:js` | open-steamgate, JavaScript path | Node, Git |
-| `npm run osg` | both open-steamgate paths | Node, Go, Git |
+| `npm run osg` | open-steamgate, Go target | Node, Go, Git |
 
 Run `npm install` first. `npm run unit` (part of `npm test`) clones the
 [abaplint transpiler](https://github.com/abaplint/transpiler) into `tools/transpiler` at the commit
@@ -60,9 +58,9 @@ fork or a branch of the transpiler instead, point it at that checkout:
 Tests listed in `tools/known-gaps.json` fail on that toolchain for a known reason; they are
 reported as `KNOWN` and don't fail the run, and as `FIXED` once they pass.
 
-The `osg` scripts clone open-steamgate into `tools/open-steamgate`
-at the commit pinned in `tools/toolchains.lock.json`, set it up, and write one JSON result per
-path to `results/`. They work on Linux, macOS and native Windows. On Windows the runner adds the
+`npm run osg` clones open-steamgate into `tools/open-steamgate` at the commit pinned in
+`tools/toolchains.lock.json`, sets it up, compiles the tests to Go and writes the result to
+`results/osg-go-unit.json`. It works on Linux, macOS and native Windows. On Windows the runner adds the
 workarounds in `tools/osg-win-paths.mjs` and `tools/osg-windows.patch`.
 
 ## Status

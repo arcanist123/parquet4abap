@@ -7,9 +7,9 @@ The project has two goals of equal weight:
 1. **A working Parquet library in native ABAP.** Read and write Apache Parquet files from ABAP
    internal tables, in memory, with no external tools, middleware or kernel extensions.
 2. **A reference scenario and demo for ABAP toolchains.** The same source code is built and run
-   on four toolchains: the ABAP platform (installed with abapGit), the abaplint transpiler, and
-   open-steamgate's JavaScript and Go paths. The project reports where each toolchain handles real-world ABAP
-   correctly, where it falls short, and how fast it runs. It also serves as a worked example of
+   on three toolchains: the ABAP platform (installed with abapGit), the abaplint transpiler, and
+   open-steamgate's Go compilation target. The project reports where each toolchain handles
+   real-world ABAP correctly, where it falls short, and how fast it runs. It also serves as a worked example of
    taking one non-trivial ABAP code base through each toolchain.
 
 Parquet fits the second goal well. It needs byte- and bit-level work on `xstring`, integer
@@ -84,16 +84,18 @@ we write can be checked with independent tools such as pyarrow or DuckDB.
 
 ### Target toolchains
 
-The same library source, with its ABAP Unit tests, must run unchanged on four toolchains:
+The same library source, with its ABAP Unit tests, must run unchanged on three toolchains:
 
 1. **ABAP platform**: the library installed with abapGit
 2. **abaplint transpiler** ([abaplint/transpiler](https://github.com/abaplint/transpiler)), built from
    its Git repository at a pinned commit, so fixes can be tried before they are released
-3. **open-steamgate, JavaScript path** ([oisee/open-steamgate](https://github.com/oisee/open-steamgate),
-   `npm run osgjs:unit`): its own pinned forks of the transpiler and open-abap-core, so results
-   can differ from toolchain 2
-4. **open-steamgate, Go path** (`npm run osgo:unit`, and `tools/gogen/osabap.mjs` for native
-   executables): ABAP is compiled to Go and built into a native binary
+3. **open-steamgate, Go target** ([oisee/open-steamgate](https://github.com/oisee/open-steamgate),
+   `npm run osgo:unit`, and `tools/gogen/osabap.mjs` for native executables): ABAP is compiled
+   to Go and built into a native binary
+
+open-steamgate also has a JavaScript path, built on its own forks of the transpiler and
+open-abap-core. We leave it out: the abaplint transpiler covers ABAP on JavaScript, and what
+open-steamgate adds is the Go target.
 
 open-steamgate runs on native Windows, without WSL. Until its tooling handles Windows paths
 itself, our runner loads a small preload (`tools/osg-win-paths.mjs`) and applies one patch
@@ -104,7 +106,7 @@ Each run records the exact version (commit or release tag) of the toolchain it u
 The ABAP platform is the reference for language semantics. Its column in the reports gives the
 *expected* behaviour, based on the ABAP keyword documentation and common experience, and carries
 no benchmark numbers. Measured results and performance figures cover the abaplint transpiler and
-both open-steamgate paths only.
+open-steamgate's Go target only.
 
 ### What we measure
 
