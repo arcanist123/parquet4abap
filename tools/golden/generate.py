@@ -118,12 +118,22 @@ def cases():
         row_group_size=2, store_schema=False,
         sorting_columns=[pq.SortingColumn(0), pq.SortingColumn(1, descending=True,
                                                                 nulls_first=True)])
+    yield "pa_plain_gzip", "pyarrow", write_pyarrow(
+        "pa_plain_gzip", flat, use_dictionary=False, compression="gzip")
+    # one value per page: write_batch_size=1 lets every value end a page
+    yield "pa_v2_plain_pages", "pyarrow", write_pyarrow(
+        "pa_v2_plain_pages", flat, use_dictionary=False, compression="gzip",
+        data_page_version="2.0", row_group_size=3, data_page_size=1,
+        write_batch_size=1)
     yield "pa_index_crc_bloom", "pyarrow", write_pyarrow(
         "pa_index_crc_bloom", flat, compression="none", write_page_index=True,
         write_page_checksum=True,
         bloom_filter_options={"id": True, "name": True})
     yield "pa_logical", "pyarrow", write_pyarrow(
         "pa_logical", logical_table(), compression="none",
+        coerce_timestamps=None, allow_truncated_timestamps=False)
+    yield "pa_logical_plain", "pyarrow", write_pyarrow(
+        "pa_logical_plain", logical_table(), compression="none", use_dictionary=False,
         coerce_timestamps=None, allow_truncated_timestamps=False)
     yield "pa_nested", "pyarrow", write_pyarrow(
         "pa_nested", nested_table(), compression="none")

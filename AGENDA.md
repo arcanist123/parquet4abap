@@ -145,12 +145,14 @@ open-steamgate's Go target only.
   every toolchain.
 - **Golden corpus:** a versioned set of Parquet files produced with pyarrow and DuckDB, each with
   a JSON description of its expected contents. A generator script makes the corpus reproducible.
-- **Benchmark program:** `bench/zparq2a_benchmark.prog.abap`, a report with parameters for row
-  count, seed and an optional output file. On the Go path it is compiled into a native executable
-  with `osabap.mjs bench/zparq2a_benchmark.prog.abap --lib src`; with an output file it writes the
-  Parquet file through `DATASET`, so pyarrow and DuckDB can check what the Go binary wrote. It is
-  a fixed ABAP entry point that generates deterministic data (seeded),
-  writes it, reads it back, and prints timings in a machine-readable format.
+- **Benchmark:** `ZPARQ2A_CL_BENCHMARK` generates deterministic data from a seed, writes it,
+  reads it back, compares the rows and times both steps with `GET RUN TIME FIELD`. The report
+  `ZPARQ2A_BENCHMARK` runs it with parameters for row count, seed, runs, GZIP and an optional
+  output file, and prints the timings in a machine-readable format. Both live in `src/`, so
+  abapGit installs them with the library. `npm run bench` (`tools/run-bench.mjs`) runs the class
+  on the transpiler, which can't pass parameters to a report, and builds the report into a native
+  executable with `osabap.mjs` on the Go path. With an output file the report writes the Parquet
+  file through `DATASET`, and `tools/bench/check.py` checks every toolchain's file with pyarrow.
 - **Runner scripts:** one script per toolchain (build → test → benchmark) that collect results
   into a common format.
 - **CI:** run all toolchains on every push and publish a results table.
@@ -178,8 +180,7 @@ Each Track A milestone ends with a Track B checkpoint, so results build up step 
 ## Repository layout (proposed)
 
 ```
-src/                 abapGit-serialized ABAP (library + unit tests)
-bench/               benchmark entry point and datasets
+src/                 abapGit-serialized ABAP (library, unit tests, benchmark)
 testdata/golden/     golden Parquet files + expected-content JSON
 tools/               corpus generator (Python), per-toolchain runner scripts
 docs/                design notes, comparison report

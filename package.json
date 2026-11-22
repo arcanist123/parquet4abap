@@ -9,6 +9,7 @@
     "test": "npm run lint && npm run unit",
     "osg": "node tools/run-osg.mjs",
     "samples": "node tools/write-samples.mjs",
-    "lint:local": "node tools/run-lint.mjs --local"
+    "lint:local": "node tools/run-lint.mjs --local",
+    "bench": "node tools/run-bench.mjs"
   }
 }

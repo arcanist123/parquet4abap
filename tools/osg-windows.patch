@@ -1,3 +1,35 @@
+diff --git a/tools/gogen/osabap.mjs b/tools/gogen/osabap.mjs
+index 5f5ebc68..db202fd7 100644
+--- a/tools/gogen/osabap.mjs
++++ b/tools/gogen/osabap.mjs
+@@ -7,6 +7,7 @@ import {writeGo, reportSymbols} from "./symbols.ts";
+ import {execFileSync} from "node:child_process";
+ import {copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync} from "node:fs";
+ import {basename, dirname, join, resolve} from "node:path";
++import {pathToFileURL} from "node:url";
+ import {runnerCacheOptions} from "./runner-cache.mjs";
+ import {prepareRunnerCache, finishRunnerCache} from "./runner-cache-recording.mjs";
+ import {compileClosedProgram} from "./frontend-closure.mjs";
+@@ -69,8 +70,8 @@ mkdirSync(generated, {recursive: true});
+ mkdirSync(dir, {recursive: true});
+ 
+ const gui = libraryPath(home, "open-abap-gui");
+-const {convertProgram} = await import(join(gui, "converter", "src", "api.mjs"));
+-const {parseSource} = await import(join(gui, "converter", "src", "parser.mjs"));
++const {convertProgram} = await import(pathToFileURL(join(gui, "converter", "src", "api.mjs")).href);
++const {parseSource} = await import(pathToFileURL(join(gui, "converter", "src", "parser.mjs")).href);
+ const source = readFileSync(report, "utf8");
+ // the selection texts of the report (TPOOL, ID S) from the abapGit <report>.prog.xml
+ // beside it: the labels of the terminal form and of -help; the text symbols
+@@ -282,7 +283,7 @@ writeGo(join(dir, "zz_generated.go"), program);
+ const tables = ddic.filter((file) => /\.tabl\.xml$/i.test(file)).map((file) => file.replace(/\.tabl\.xml$/i, "").toUpperCase());
+ let schema = [];
+ if (tables.length > 0) {
+-  const {DatabaseSetup} = await import(join(home, "node_modules", "@abaplint", "transpiler", "build", "src", "db", "index.js"));
++  const {DatabaseSetup} = await import(pathToFileURL(join(home, "node_modules", "@abaplint", "transpiler", "build", "src", "db", "index.js")).href);
+   assertTableFieldsTyped(program.reg);
+   const own = new Set(tables.map((t) => t.toLowerCase()));
+   schema = new DatabaseSetup(program.reg).run().schemas.sqlite
 diff --git a/tools/gogen/unit.mjs b/tools/gogen/unit.mjs
 index db58dbca..5c6c9aef 100644
 --- a/tools/gogen/unit.mjs
