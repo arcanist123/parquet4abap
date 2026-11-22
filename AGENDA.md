@@ -147,8 +147,8 @@ Each Track A milestone ends with a Track B checkpoint, so results build up step 
 | Checkpoint | After | Focus |
 |------------|-------|-------|
 | B1 | A1 | Integer, bit-operator and `xstring` semantics; first micro-benchmarks |
-| B2 | A2 | Recursion, structures, OO dispatch |
-| B3 | A3/A4 | RTTI, dynamic data (`ASSIGN COMPONENT`, `CREATE DATA`), GZIP availability; first end-to-end throughput numbers |
+| B2 | A2 | Recursion, structures |
+| B3 | A3/A4 | OO dispatch (encoders and compressors chosen per column), RTTI, dynamic data (`ASSIGN COMPONENT`, `CREATE DATA`), GZIP availability; first end-to-end throughput numbers |
 | B4 | A6 | CPU-heavy pure-ABAP compression: the main performance comparison |
 | B5 | A7/A8 | Memory behaviour at scale; nested generic code |
 
