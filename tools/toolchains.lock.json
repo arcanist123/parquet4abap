@@ -1,9 +1,15 @@
 {
+  "abaplint-transpiler": {
+    "repo": "https://github.com/abaplint/transpiler",
+    "commit": "60ba0177e20a2a793f07b639fb55b8db5e4c032e"
+  },
   "open-steamgate": {
     "repo": "https://github.com/oisee/open-steamgate",
     "commit": "9d2f0529ea5ac9056d7c49c8f19166d14ad6c36b",
     "go": "go1.26.0",
-    "patches": ["tools/osg-windows.patch"],
+    "patches": [
+      "tools/osg-windows.patch"
+    ],
     "windowsWorkarounds": {
       "tools/osg-windows.patch": "https://github.com/oisee/open-steamgate/issues/846",
       "tools/osg-win-paths.mjs": [

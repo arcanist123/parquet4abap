@@ -15,5 +15,16 @@ jobs:
       - run: npm install --no-fund --no-audit
       - name: abaplint
         run: npm run lint
+      - name: Cache the transpiler build
+        uses: actions/cache@v4
+        with:
+          path: tools/transpiler
+          key: transpiler-${{ hashFiles('tools/toolchains.lock.json') }}
       - name: ABAP Unit on the abaplint transpiler
         run: npm run unit
+      - name: Keep the result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: transpiler-unit
+          path: results/transpiler-unit.json

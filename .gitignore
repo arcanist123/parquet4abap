@@ -2,4 +2,5 @@ node_modules/
 output/
 deps/
 tools/open-steamgate/
+tools/transpiler/
 results/
