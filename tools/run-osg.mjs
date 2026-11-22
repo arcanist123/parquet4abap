@@ -1,16 +1,20 @@
 #!/usr/bin/env node
-// Runs the ABAP Unit tests in src/ on open-steamgate, on its Go path, its
-// JavaScript path, or both, and writes one JSON result per path to results/.
+// Runs the ABAP Unit tests in src/ on open-steamgate's Go target and writes the
+// result to results/osg-go-unit.json. open-steamgate's JavaScript path is left
+// out: the abaplint transpiler covers ABAP on JavaScript (tools/run-transpiler.mjs).
 //
-//   node tools/run-osg.mjs [--path go|js|all] [--skip-setup] [--class NAME...]
+//   node tools/run-osg.mjs [--skip-setup] [--class NAME...]
 //
 // The open-steamgate commit, the Go toolchain and the local patches come from
 // tools/toolchains.lock.json. The checkout lives in tools/open-steamgate and is
 // not part of this repository.
 //
-// Exit code: 0 when every selected path passed; otherwise the highest exit code
-// of open-steamgate's runners (1 test failure, 2 not compiled or error, 3 no
-// tests), or 4 when setup failed.
+// Tests listed under "open-steamgate-go" in tools/known-gaps.json fail as KNOWN
+// and do not fail the run; a known gap that passes is reported as FIXED.
+//
+// Exit code: 0 when no test failed unexpectedly; otherwise 1 for a test failure,
+// 2 for a test not compiled or an error, as open-steamgate's runner counts them
+// (3 when it found no tests), or 4 when setup failed.
 import {spawnSync} from "node:child_process";
 import {existsSync, mkdirSync, readFileSync, writeFileSync} from "node:fs";
 import {dirname, join, resolve} from "node:path";
@@ -27,20 +31,17 @@ const osgRoot = tidy(join(repoRoot, "tools", "open-steamgate"));
 const srcDir = tidy(join(repoRoot, "src"));
 const resultsDir = join(repoRoot, "results");
 const shim = join(repoRoot, "tools", "osg-win-paths.mjs");
+const knownGaps = JSON.parse(readFileSync(join(repoRoot, "tools", "known-gaps.json"), "utf8"))["open-steamgate-go"] ?? {};
 
 class SetupError extends Error {}
 
 function parseArgs(argv) {
-  const options = {paths: ["go", "js"], skipSetup: false, classes: []};
+  const options = {skipSetup: false, classes: []};
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     if (arg === "--help" || arg === "-h") {
-      console.log(readFileSync(fileURLToPath(import.meta.url), "utf8").split("\n").slice(1, 14).map((l) => l.replace(/^\/\/ ?/, "")).join("\n"));
+      console.log(readFileSync(fileURLToPath(import.meta.url), "utf8").split("\n").slice(1, 17).map((l) => l.replace(/^\/\/ ?/, "")).join("\n"));
       process.exit(0);
-    } else if (arg === "--path") {
-      const value = argv[++i];
-      if (!["go", "js", "all"].includes(value)) throw new SetupError("--path must be go, js or all");
-      options.paths = value === "all" ? ["go", "js"] : [value];
     } else if (arg === "--skip-setup") options.skipSetup = true;
     else if (arg === "--class") {
       while (argv[i + 1] && !argv[i + 1].startsWith("--")) options.classes.push(argv[++i].toUpperCase());
@@ -141,10 +142,9 @@ function checkGo(env) {
   return result.stdout.trim();
 }
 
-function runPath(path, env, classes) {
-  const script = path === "go" ? "tools/osgo-unit.mjs" : "tools/osgjs-unit.mjs";
-  const args = [script, srcDir, "--json", ...(classes.length ? ["--class", ...classes] : [])];
-  log(`open-steamgate ${path === "go" ? "Go" : "JavaScript"} path: unit tests`);
+function runTests(env, classes) {
+  const args = ["tools/osgo-unit.mjs", srcDir, "--json", ...(classes.length ? ["--class", ...classes] : [])];
+  log("open-steamgate Go target: unit tests");
   const started = new Date();
   const child = run("node", args, {env, capture: true, allowFail: true});
   const durationMs = Date.now() - started.getTime();
@@ -153,9 +153,33 @@ function runPath(path, env, classes) {
   try { result = JSON.parse(child.stdout.trim().split(/\r?\n/).at(-1)); }
   catch { result = {rows: [{source: "run-osg", status: "ERROR", message: child.stderr.trim() || `no JSON output (exit ${child.status})`}]}; }
 
+  // known gaps: KNOWN while they fail, FIXED once they pass
+  const rows = result.rows ?? [];
+  for (const row of rows) {
+    const gap = knownGaps[[row.class, row.testclass, row.method].join("/")];
+    if (!gap) continue;
+    row.gap = gap;
+    if (row.status === "SUCCESS") row.status = "FIXED";
+    else {
+      row.osgStatus = row.status;
+      row.status = "KNOWN";
+    }
+  }
+  const unexpected = rows.filter((r) => !["SUCCESS", "KNOWN", "FIXED"].includes(r.status));
+  const exitCode = rows.length === 0 ? child.status
+    : unexpected.some((r) => r.status !== "FAILURE") ? 2
+      : unexpected.length > 0 ? 1 : 0;
+  result.totals = {...result.totals,
+    known: rows.filter((r) => r.status === "KNOWN").length,
+    fixed: rows.filter((r) => r.status === "FIXED").length,
+    failure: rows.filter((r) => r.status === "FAILURE").length,
+    not_compiled: rows.filter((r) => r.status === "NOT_COMPILED").length,
+    error: rows.filter((r) => r.status === "ERROR").length};
+
   return {
-    toolchain: `open-steamgate-${path}`,
-    exitCode: child.status,
+    toolchain: "open-steamgate-go",
+    exitCode,
+    osgExitCode: child.status,
     started: started.toISOString(),
     durationMs,
     openSteamgate: {repo: lock.repo, commit: lock.commit, patches: lock.patches},
@@ -167,11 +191,11 @@ function runPath(path, env, classes) {
 function summarize(report) {
   const totals = report.result.totals ?? {};
   const label = report.toolchain.padEnd(20);
-  console.log(`${label} exit ${report.exitCode}  tests ${totals.tests ?? 0}  success ${totals.success ?? 0}  failure ${totals.failure ?? 0}  not_compiled ${totals.not_compiled ?? 0}  error ${totals.error ?? 0}  (${(report.durationMs / 1000).toFixed(1)} s)`);
+  console.log(`${label} exit ${report.exitCode}  tests ${totals.tests ?? 0}  success ${totals.success ?? 0}  failure ${totals.failure ?? 0}  not_compiled ${totals.not_compiled ?? 0}  error ${totals.error ?? 0}  known ${totals.known ?? 0}  fixed ${totals.fixed ?? 0}  (${(report.durationMs / 1000).toFixed(1)} s)`);
   for (const row of report.result.rows ?? []) {
     if (row.status === "SUCCESS") continue;
     const where = [row.class, row.testclass, row.method].filter(Boolean).join("/") || "run";
-    console.log(`  ${row.status} ${where}: ${String(row.message ?? "").replace(/\s+/g, " ").slice(0, 300)}`);
+    console.log(`  ${row.status} ${where}${row.gap ? ` (${row.gap})` : ""}: ${String(row.message ?? "").replace(/\s+/g, " ").slice(0, 300)}`);
   }
 }
 
@@ -183,17 +207,13 @@ function main() {
   }
   const env = toolchainEnv();
   if (!options.skipSetup) syncLibraries(env);
-  if (options.paths.includes("go")) checkGo(env);
+  checkGo(env);
 
   mkdirSync(resultsDir, {recursive: true});
-  let exitCode = 0;
-  for (const path of options.paths) {
-    const report = runPath(path, env, options.classes);
-    writeFileSync(join(resultsDir, `osg-${path}-unit.json`), `${JSON.stringify(report, null, 2)}\n`);
-    summarize(report);
-    exitCode = Math.max(exitCode, report.exitCode ?? 2);
-  }
-  return exitCode;
+  const report = runTests(env, options.classes);
+  writeFileSync(join(resultsDir, "osg-go-unit.json"), `${JSON.stringify(report, null, 2)}\n`);
+  summarize(report);
+  return report.exitCode ?? 2;
 }
 
 try {

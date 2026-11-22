@@ -7,9 +7,7 @@
     "unit": "node tools/run-transpiler.mjs",
     "unit:local": "node tools/run-transpiler.mjs --local",
     "test": "npm run lint && npm run unit",
-    "osg": "node tools/run-osg.mjs",
-    "osg:go": "node tools/run-osg.mjs --path go",
-    "osg:js": "node tools/run-osg.mjs --path js"
+    "osg": "node tools/run-osg.mjs"
   },
   "devDependencies": {
     "@abaplint/cli": "^2.120.113"
