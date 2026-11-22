@@ -1,3 +1,19 @@
 {
-  "abaplint-transpiler": {}
+  "abaplint-transpiler": {
+    "ZPARQ2A_CL_BYTES/LTCL_INTEGERS/INT64_EDGE_VALUES": "https://github.com/abaplint/transpiler/issues/2150 (int8 literals above 2^53 lose digits)",
+    "ZPARQ2A_CL_BYTES/LTCL_VARINTS/VARINT_EDGE_VALUES": "https://github.com/abaplint/transpiler/issues/2150 (int8 literals above 2^53 lose digits)",
+    "ZPARQ2A_CL_BYTE_READER/LTCL_BYTE_READER/VARINTS": "https://github.com/abaplint/transpiler/issues/2150 (int8 literals above 2^53 lose digits)",
+    "ZPARQ2A_CL_BYTES/LTCL_VARINTS/ZIGZAG_EDGE_VALUES": "https://github.com/abaplint/transpiler/issues/2170 (- a - 1 is calculated as - ( a - 1 )), also #2150",
+    "ZPARQ2A_CL_BYTE_READER/LTCL_BYTE_READER/ZIGZAG_VARINTS": "https://github.com/abaplint/transpiler/issues/2170 (- a - 1 is calculated as - ( a - 1 ))",
+    "ZPARQ2A_CL_BYTE_WRITER/LTCL_BYTE_WRITER/ROUND_TRIP": "https://github.com/abaplint/transpiler/issues/2170 (- a - 1 is calculated as - ( a - 1 )), also #2150",
+    "ZPARQ2A_CL_BYTES/LTCL_FLOATS/DOUBLE_NORMAL_VALUES": "https://github.com/abaplint/transpiler/issues/2231 (int8 with f operands is calculated as int8)",
+    "ZPARQ2A_CL_BYTES/LTCL_FLOATS/DOUBLE_LIMITS": "https://github.com/abaplint/transpiler/issues/2231 (int8 with f operands is calculated as int8)",
+    "ZPARQ2A_CL_BYTES/LTCL_FLOATS/DOUBLE_SUBNORMALS": "https://github.com/abaplint/transpiler/issues/2231 (int8 with f operands is calculated as int8)",
+    "ZPARQ2A_CL_BYTES/LTCL_FLOATS/DOUBLE_NEGATIVE_ZERO": "https://github.com/abaplint/transpiler/issues/2231 (int8 with f operands is calculated as int8)",
+    "ZPARQ2A_CL_BYTES/LTCL_FLOATS/FLOAT_NORMAL_VALUES": "https://github.com/abaplint/transpiler/issues/2231 (int8 with f operands is calculated as int8)",
+    "ZPARQ2A_CL_BYTES/LTCL_FLOATS/FLOAT_LIMITS": "https://github.com/abaplint/transpiler/issues/2231 (int8 with f operands is calculated as int8)",
+    "ZPARQ2A_CL_BYTES/LTCL_FLOATS/FLOAT_SUBNORMALS": "https://github.com/abaplint/transpiler/issues/2231 (int8 with f operands is calculated as int8)",
+    "ZPARQ2A_CL_BYTE_READER/LTCL_BYTE_READER/FIXED_WIDTH_VALUES": "https://github.com/abaplint/transpiler/issues/2231 (int8 with f operands is calculated as int8)",
+    "ZPARQ2A_CL_BYTES/LTCL_INTEGERS/REVERSE_BYTES": "https://github.com/abaplint/transpiler/issues/2232 (text literal to xsequence: offsets on characters)"
+  }
 }
