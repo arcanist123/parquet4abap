@@ -6,7 +6,10 @@
     "lint": "abaplint",
     "transpile": "node tools/clean-output.mjs && abap_transpile",
     "unit": "npm run transpile && node output/index.mjs",
-    "test": "npm run lint && npm run unit"
+    "test": "npm run lint && npm run unit",
+    "osg": "node tools/run-osg.mjs",
+    "osg:go": "node tools/run-osg.mjs --path go",
+    "osg:js": "node tools/run-osg.mjs --path js"
   },
   "devDependencies": {
     "@abaplint/cli": "^2.120.113",
