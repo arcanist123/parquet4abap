@@ -11,8 +11,17 @@
     ]
   },
   "open-steamgate": {
-    "repo": "https://github.com/oisee/open-steamgate",
-    "commit": "9d2f0529ea5ac9056d7c49c8f19166d14ad6c36b",
+    "repo": "https://github.com/arcanist123/open-steamgate",
+    "branch": "parquet4abap",
+    "commit": "4f114ceabc91f230cb4aebfc8305b2fa82c03440",
+    "upstream": "https://github.com/oisee/open-steamgate",
+    "unmergedPullRequests": [
+      "https://github.com/oisee/open-steamgate/pull/1000",
+      "https://github.com/oisee/open-steamgate/pull/1001",
+      "https://github.com/oisee/open-steamgate/pull/1002",
+      "https://github.com/oisee/open-steamgate/pull/1003",
+      "https://github.com/oisee/open-steamgate/pull/1004"
+    ],
     "go": "go1.26.0",
     "patches": [
       "tools/osg-windows.patch"

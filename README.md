@@ -98,8 +98,12 @@ pass. The file has one section per toolchain: `abaplint-transpiler` and `open-st
 
 `npm run osg` clones open-steamgate into `tools/open-steamgate` at the commit pinned in
 `tools/toolchains.lock.json`, sets it up, compiles the tests to Go and writes the result to
-`results/osg-go-unit.json`. It works on Linux, macOS and native Windows. On Windows the runner adds the
-workarounds in `tools/osg-win-paths.mjs` and `tools/osg-windows.patch`.
+`results/osg-go-unit.json`. As for the transpiler, while fixes we need are open upstream the lock
+points at the branch `parquet4abap` of the fork
+[arcanist123/open-steamgate](https://github.com/arcanist123/open-steamgate/tree/parquet4abap), which
+merges those pull requests (`unmergedPullRequests`) into upstream main. It works on Linux, macOS and
+native Windows. On Windows the runner adds the workarounds in `tools/osg-win-paths.mjs` and
+`tools/osg-windows.patch`.
 
 ## Golden files
 

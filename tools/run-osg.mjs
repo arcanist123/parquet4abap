@@ -6,8 +6,9 @@
 //   node tools/run-osg.mjs [--skip-setup] [--class NAME...]
 //
 // The open-steamgate commit, the Go toolchain and the local patches come from
-// tools/toolchains.lock.json. The checkout lives in tools/open-steamgate and is
-// not part of this repository.
+// tools/toolchains.lock.json. While fixes we need are open upstream, the commit
+// is on a branch of our fork that merges them into upstream main. The checkout
+// lives in tools/open-steamgate and is not part of this repository.
 //
 // Tests listed under "open-steamgate-go" in tools/known-gaps.json fail as KNOWN
 // and do not fail the run; a known gap that passes is reported as FIXED.
@@ -83,6 +84,11 @@ function prepareCheckout() {
   const patches = lock.patches.map((p) => join(repoRoot, p));
   const applied = (patch) => run("git", ["apply", "--reverse", "--check", patch], {capture: true, allowFail: true}).status === 0;
 
+  // the lock may move to another repository, e.g. a fork with fixes not merged yet
+  if (git("remote", "get-url", "origin") !== lock.repo) {
+    log(`switching origin to ${lock.repo}`);
+    run("git", ["remote", "set-url", "origin", lock.repo]);
+  }
   const dirty = git("status", "--porcelain", "--untracked-files=no");
   if (dirty) {
     for (const patch of patches) if (applied(patch)) run("git", ["apply", "--reverse", patch]);
