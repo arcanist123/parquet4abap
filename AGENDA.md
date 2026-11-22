@@ -97,6 +97,11 @@ The same library source, with its ABAP Unit tests, must run unchanged on three t
    `npm run osgo:unit`, and `tools/gogen/osabap.mjs` for native executables): ABAP is compiled
    to Go and built into a native binary
 
+abaplint, which checks the source before the transpiler runs it, is built the same way: from the
+pinned commit of a branch of our fork ([arcanist123/abaplint](https://github.com/arcanist123/abaplint))
+that merges our open pull requests into the latest upstream main. Running both on our forks is the
+goal, so a fix takes effect for us as soon as it is written, not when it is released.
+
 open-steamgate also has a JavaScript path, built on its own forks of the transpiler and
 open-abap-core. We leave it out: the abaplint transpiler covers ABAP on JavaScript, and what
 open-steamgate adds is the Go target.

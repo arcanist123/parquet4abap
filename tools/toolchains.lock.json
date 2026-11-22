@@ -1,4 +1,14 @@
 {
+  "abaplint": {
+    "repo": "https://github.com/arcanist123/abaplint",
+    "branch": "parquet4abap",
+    "commit": "01a2bef84421d9422a1342cb7cc13259280b4902",
+    "upstream": "https://github.com/abaplint/abaplint",
+    "unmergedPullRequests": [
+      "https://github.com/abaplint/abaplint/pull/4662",
+      "https://github.com/abaplint/abaplint/pull/4663"
+    ]
+  },
   "abaplint-transpiler": {
     "repo": "https://github.com/arcanist123/transpiler",
     "branch": "parquet4abap",
