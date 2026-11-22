@@ -18,20 +18,12 @@
 // (3 when it found no tests), or 4 when setup failed.
 import {spawnSync} from "node:child_process";
 import {existsSync, mkdirSync, readFileSync, writeFileSync} from "node:fs";
-import {dirname, join, resolve} from "node:path";
-import {fileURLToPath, pathToFileURL} from "node:url";
+import {join} from "node:path";
+import {fileURLToPath} from "node:url";
+import {lock, osgRoot, repoRoot, tidy, toolchainEnv, windows} from "./osg-env.mjs";
 
-const windows = process.platform === "win32";
-// Forward slashes and an upper-case drive letter: the form open-steamgate's
-// tooling handles on Windows (see tools/osg-win-paths.mjs).
-const tidy = (p) => windows ? p.replaceAll("\\", "/").replace(/^([a-z]):/, (_, d) => `${d.toUpperCase()}:`) : p;
-
-const repoRoot = tidy(resolve(dirname(fileURLToPath(import.meta.url)), ".."));
-const lock = JSON.parse(readFileSync(join(repoRoot, "tools", "toolchains.lock.json"), "utf8"))["open-steamgate"];
-const osgRoot = tidy(join(repoRoot, "tools", "open-steamgate"));
 const srcDir = tidy(join(repoRoot, "src"));
 const resultsDir = join(repoRoot, "results");
-const shim = join(repoRoot, "tools", "osg-win-paths.mjs");
 const knownGaps = JSON.parse(readFileSync(join(repoRoot, "tools", "known-gaps.json"), "utf8"))["open-steamgate-go"] ?? {};
 
 class SetupError extends Error {}
@@ -116,18 +108,6 @@ function installDependencies() {
   log("installing open-steamgate dependencies (npm ci)");
   run("npm", ["ci", "--no-fund", "--no-audit"]);
   writeFileSync(stamp, `${lock.commit}\n`);
-}
-
-function toolchainEnv() {
-  const env = {...process.env, GOTOOLCHAIN: lock.go};
-  // open-steamgate's tooling reads its transpiler pin from the environment.
-  const lines = run("node", ["tools/osd-lock.mjs", "github-env"], {capture: true}).stdout.split(/\r?\n/);
-  for (const line of lines) {
-    const match = /^([A-Z0-9_]+)=(.*)$/.exec(line.trim());
-    if (match) env[match[1]] = match[2];
-  }
-  if (windows) env.NODE_OPTIONS = [env.NODE_OPTIONS, `--import=${pathToFileURL(shim).href}`].filter(Boolean).join(" ");
-  return env;
 }
 
 // Fresh clones on Windows are sometimes locked for a moment (indexer or
