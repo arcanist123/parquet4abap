@@ -62,11 +62,23 @@ CLASS zparq2a_cl_golden DEFINITION
       RETURNING
         VALUE(result) TYPE ty_file.
 
+    CLASS-METHODS pa_plain_gzip
+      RETURNING
+        VALUE(result) TYPE ty_file.
+
+    CLASS-METHODS pa_v2_plain_pages
+      RETURNING
+        VALUE(result) TYPE ty_file.
+
     CLASS-METHODS pa_index_crc_bloom
       RETURNING
         VALUE(result) TYPE ty_file.
 
     CLASS-METHODS pa_logical
+      RETURNING
+        VALUE(result) TYPE ty_file.
+
+    CLASS-METHODS pa_logical_plain
       RETURNING
         VALUE(result) TYPE ty_file.
 
@@ -91,8 +103,11 @@ CLASS zparq2a_cl_golden IMPLEMENTATION.
     APPEND pa_plain_none( ) TO result.
     APPEND pa_dict_snappy( ) TO result.
     APPEND pa_v2_gzip_groups( ) TO result.
+    APPEND pa_plain_gzip( ) TO result.
+    APPEND pa_v2_plain_pages( ) TO result.
     APPEND pa_index_crc_bloom( ) TO result.
     APPEND pa_logical( ) TO result.
+    APPEND pa_logical_plain( ) TO result.
     APPEND pa_nested( ) TO result.
     APPEND duckdb_snappy( ) TO result.
     APPEND duckdb_v2_none( ) TO result.
@@ -787,6 +802,521 @@ CLASS zparq2a_cl_golden IMPLEMENTATION.
     result-data = from_hex( lines ).
   ENDMETHOD.
 
+  METHOD pa_plain_gzip.
+    DATA lines TYPE string_table.
+
+    result-name = `pa_plain_gzip`.
+    result-footer_length = 1818.
+    result-created_by = `parquet-cpp-arrow version 26.0.1`.
+    result-num_rows = 4.
+    result-num_row_groups = 1.
+    result-leaf_columns = VALUE #(
+      ( `id` )
+      ( `big` )
+      ( `ratio` )
+      ( `small` )
+      ( `flag` )
+      ( `name` )
+      ( `raw` )
+      ( `day` )
+      ( `ts` )
+      ( `amount` )
+    ).
+    result-key_value_keys = VALUE #(
+      ( `ARROW:schema` )
+    ).
+    result-columns = VALUE #(
+      ( row_group              = 0
+        column                 = 0
+        path                   = `id`
+        physical_type          = 1
+        codec                  = 2
+        num_values             = 4
+        data_page_offset       = 4
+        dictionary_page_offset = 0
+        total_compressed_size  = 83
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 1
+        path                   = `big`
+        physical_type          = 2
+        codec                  = 2
+        num_values             = 4
+        data_page_offset       = 87
+        dictionary_page_offset = 0
+        total_compressed_size  = 98
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 2
+        path                   = `ratio`
+        physical_type          = 5
+        codec                  = 2
+        num_values             = 4
+        data_page_offset       = 185
+        dictionary_page_offset = 0
+        total_compressed_size  = 105
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 3
+        path                   = `small`
+        physical_type          = 4
+        codec                  = 2
+        num_values             = 4
+        data_page_offset       = 290
+        dictionary_page_offset = 0
+        total_compressed_size  = 82
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 4
+        path                   = `flag`
+        physical_type          = 0
+        codec                  = 2
+        num_values             = 4
+        data_page_offset       = 372
+        dictionary_page_offset = 0
+        total_compressed_size  = 62
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 5
+        path                   = `name`
+        physical_type          = 6
+        codec                  = 2
+        num_values             = 4
+        data_page_offset       = 434
+        dictionary_page_offset = 0
+        total_compressed_size  = 84
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 6
+        path                   = `raw`
+        physical_type          = 6
+        codec                  = 2
+        num_values             = 4
+        data_page_offset       = 518
+        dictionary_page_offset = 0
+        total_compressed_size  = 61
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 7
+        path                   = `day`
+        physical_type          = 1
+        codec                  = 2
+        num_values             = 4
+        data_page_offset       = 579
+        dictionary_page_offset = 0
+        total_compressed_size  = 82
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 8
+        path                   = `ts`
+        physical_type          = 2
+        codec                  = 2
+        num_values             = 4
+        data_page_offset       = 661
+        dictionary_page_offset = 0
+        total_compressed_size  = 101
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 9
+        path                   = `amount`
+        physical_type          = 7
+        codec                  = 2
+        num_values             = 4
+        data_page_offset       = 762
+        dictionary_page_offset = 0
+        total_compressed_size  = 84
+        has_statistics         = abap_true )
+    ).
+    lines = VALUE #(
+      ( `504152311500152C15482C15081500150615061C18040400000018040100000016002804040000001804010000001111` )
+      ( `0000001F8B080000000000020A63626060E0606404924C40CC0CC42C400C0095823055160000001500154C15462C1508` )
+      ( `1500150615061C1808000000000001000018080000000000000080160028080000000000010000180800000000000000` )
+      ( `8011110000001F8B080000000000020A63626060E060FC0F050CC88011CE6A000090074424260000001500153C15542C` )
+      ( `15081500150615061C18089C7500883CE4377E1808000000000000F4BF160228089C7500883CE4377E18080000000000` )
+      ( `00F4BF11110000001F8B080000000000020A6362606060E665008307F610FACBFE39A50C1D364FCCEB0038AF40B41E00` )
+      ( `00001500152415462C15081500150615061C180400000040180400000080160228040000004018040000008011110000` )
+      ( `001F8B080000000000020A6362606060E6666038600F6438007103007DE41BC5120000001500150E15362C1508150015` )
+      ( `0615061C180101180100160228010118010011110000001F8B080000000000020A6362606060E66605004A5D2B9B0700` )
+      ( `000015001540155E2C15081500150615061C36022805C3A4E282AC1805616C70686111110000001F8B08000000000002` )
+      ( `0A6362606060E666059289390519892C4046526A492248E0F092474D6B00A0D333BC200000001500152A15422C150815` )
+      ( `00150615061C36022801FF180011110000001F8B080000000000020A6362606060E66602920C8C30E23F005DA8A7FB15` )
+      ( `0000001500152415462C15081500150615061C1804464D00001804C606F5FF16022804464D00001804C606F5FF111100` )
+      ( `00001F8B080000000000020A6362606060E675F3650083636C5FFF03008E906288120000001500153C154C2C15081500` )
+      ( `150615061C180800401E18240A06001808FFFFFFFFFFFFFFFF1602280800401E18240A06001808FFFFFFFFFFFFFFFF11` )
+      ( `110000001F8B080000000000020A6362606060E6668001073909152E3686FF500000AE9F42AA1E00000015001524154A` )
+      ( `2C15081500150615061C18043B9AC9FF1804FFFFFFFF160228043B9AC9FF1804FFFFFFFF11110000001F8B0800000000` )
+      ( `00020A6362606060E6666060B9F41F08AC679DFC0F00E91634B012000000150419BC35001806736368656D6115140015` )
+      ( `022502180269640015042502180362696700150A25021805726174696F00150825021805736D616C6C00150025021804` )
+      ( `666C616700150C250218046E616D6525004C1C000000150C2502180372617700150225021803646179250C4C6C000000` )
+      ( `150425021802747325144C8C111C2C0000000000150E150815021806616D6F756E74250A150415122C5C150415120000` )
+      ( `001608191C19AC26001C150219250600191802696415041608168A0116A60126083C1804040000001804010000001600` )
+      ( `280404000000180401000000111100191C150015001502003C29061926000800000026001C1504192506001918036269` )
+      ( `671504160816CA0116C40126AE013C180800000000000100001808000000000000008016002808000000000001000018` )
+      ( `080000000000000080111100191C150015001502003C29061926000800000026001C150A19250600191805726174696F` )
+      ( `1504160816BA0116D20126F2023C18089C7500883CE4377E1808000000000000F4BF160228089C7500883CE4377E1808` )
+      ( `000000000000F4BF111100191C150015001502003C29061926020600000026001C150819250600191805736D616C6C15` )
+      ( `04160816820116A40126C4043C1804000000401804000000801602280400000040180400000080111100191C15001500` )
+      ( `1502003C29061926020600000026001C150019250600191804666C6167150416081654167C26E8053C18010118010016` )
+      ( `02280101180100111100191C150015001502003C29061926020600000026001C150C192506001918046E616D65150416` )
+      ( `08168A0116A80126E4063C36022805C3A4E282AC1805616C706861111100191C150015001502003C161C190619260206` )
+      ( `00000026001C150C19250600191803726177150416081662167A268C083C36022801FF1800111100191C150015001502` )
+      ( `003C160619061926020600000026001C1502192506001918036461791504160816820116A4012686093C1804464D0000` )
+      ( `1804C606F5FF16022804464D00001804C606F5FF111100191C150015001502003C29061926020600000026001C150419` )
+      ( `25060019180274731504160816BA0116CA0126AA0A3C180800401E18240A06001808FFFFFFFFFFFFFFFF160228080040` )
+      ( `1E18240A06001808FFFFFFFFFFFFFFFF111100191C150015001502003C29061926020600000026001C150E1925060019` )
+      ( `1806616D6F756E741504160816820116A80126F40B3C18043B9AC9FF1804FFFFFFFF160228043B9AC9FF1804FFFFFFFF` )
+      ( `111100191C150015001502003C290619260206000000168E0B1608260816940D00191C180C4152524F573A736368656D` )
+      ( `611880062F2F2F2F2F7A674341414151414141414141414B41417741426741464141674143674141414141424241414D` )
+      ( `41414141434141494141414142414149414141414241414141416F4141414455415141416C4145414147414241414177` )
+      ( `4151414141414541414E51414141437341414141674141414145414141414145414141415A50372F2F77414141516351` )
+      ( `4141414149414141414151414141414141414141426741414147467462335675644141414341414D4141514143414149` )
+      ( `414141414351414141414941414143632F762F2F41414142436841414141416341414141424141414141414141414143` )
+      ( `4141414164484D4141416741444141474141674143414141414141414167414541414141417741414146565551774459` )
+      ( `2F762F2F41414142434241414141415541414141424141414141414141414144414141415A47463541444C2F2F2F3841` )
+      ( `4141414141502F2F2F7741414151515141414141464141414141514141414141414141414177414141484A6864774377` )
+      ( `2F2F2F2F4A502F2F2F774141415155514141414147414141414151414141414141414141424141414147356862575541` )
+      ( `4141414132502F2F2F307A2F2F2F3841414145474541414141427741414141454141414141414141414151414141426D` )
+      ( `6247466E4141414141415141424141454141414165502F2F2F77414141514D5141414141474141414141514141414141` )
+      ( `414141414251414141484E74595778734141414131762F2F2F7741414151436B2F2F2F2F414141424178414141414163` )
+      ( `4141414142414141414141414141414641414141636D4630615738414267414941415941426741414141414141674455` )
+      ( `2F2F2F2F4141414241684141414141554141414142414141414141414141414441414141596D6C6E414D542F2F2F3841` )
+      ( `41414142514141414142414146414149414159414277414D414141414541415141414141414141424168414141414163` )
+      ( `414141414241414141414141414141434141414161575141414167414441414941416341434141414141414141414567` )
+      ( `41414141001820706172717565742D6370702D6172726F772076657273696F6E2032362E302E3119AC1C00001C00001C` )
+      ( `00001C00001C00001C00001C00001C00001C00001C0000001A07000050415231` )
+    ).
+    result-data = from_hex( lines ).
+  ENDMETHOD.
+
+  METHOD pa_v2_plain_pages.
+    DATA lines TYPE string_table.
+
+    result-name = `pa_v2_plain_pages`.
+    result-footer_length = 2609.
+    result-created_by = `parquet-cpp-arrow version 26.0.1`.
+    result-num_rows = 4.
+    result-num_row_groups = 2.
+    result-leaf_columns = VALUE #(
+      ( `id` )
+      ( `big` )
+      ( `ratio` )
+      ( `small` )
+      ( `flag` )
+      ( `name` )
+      ( `raw` )
+      ( `day` )
+      ( `ts` )
+      ( `amount` )
+    ).
+    result-key_value_keys = VALUE #(
+      ( `ARROW:schema` )
+    ).
+    result-columns = VALUE #(
+      ( row_group              = 0
+        column                 = 0
+        path                   = `id`
+        physical_type          = 1
+        codec                  = 2
+        num_values             = 3
+        data_page_offset       = 4
+        dictionary_page_offset = 0
+        total_compressed_size  = 174
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 1
+        path                   = `big`
+        physical_type          = 2
+        codec                  = 2
+        num_values             = 3
+        data_page_offset       = 178
+        dictionary_page_offset = 0
+        total_compressed_size  = 234
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 2
+        path                   = `ratio`
+        physical_type          = 5
+        codec                  = 2
+        num_values             = 3
+        data_page_offset       = 412
+        dictionary_page_offset = 0
+        total_compressed_size  = 156
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 3
+        path                   = `small`
+        physical_type          = 4
+        codec                  = 2
+        num_values             = 3
+        data_page_offset       = 568
+        dictionary_page_offset = 0
+        total_compressed_size  = 144
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 4
+        path                   = `flag`
+        physical_type          = 0
+        codec                  = 2
+        num_values             = 3
+        data_page_offset       = 712
+        dictionary_page_offset = 0
+        total_compressed_size  = 128
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 5
+        path                   = `name`
+        physical_type          = 6
+        codec                  = 2
+        num_values             = 3
+        data_page_offset       = 840
+        dictionary_page_offset = 0
+        total_compressed_size  = 131
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 6
+        path                   = `raw`
+        physical_type          = 6
+        codec                  = 2
+        num_values             = 3
+        data_page_offset       = 971
+        dictionary_page_offset = 0
+        total_compressed_size  = 110
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 7
+        path                   = `day`
+        physical_type          = 1
+        codec                  = 2
+        num_values             = 3
+        data_page_offset       = 1081
+        dictionary_page_offset = 0
+        total_compressed_size  = 116
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 8
+        path                   = `ts`
+        physical_type          = 2
+        codec                  = 2
+        num_values             = 3
+        data_page_offset       = 1197
+        dictionary_page_offset = 0
+        total_compressed_size  = 184
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 9
+        path                   = `amount`
+        physical_type          = 7
+        codec                  = 2
+        num_values             = 3
+        data_page_offset       = 1381
+        dictionary_page_offset = 0
+        total_compressed_size  = 144
+        has_statistics         = abap_true )
+      ( row_group              = 1
+        column                 = 0
+        path                   = `id`
+        physical_type          = 1
+        codec                  = 2
+        num_values             = 1
+        data_page_offset       = 1525
+        dictionary_page_offset = 0
+        total_compressed_size  = 58
+        has_statistics         = abap_true )
+      ( row_group              = 1
+        column                 = 1
+        path                   = `big`
+        physical_type          = 2
+        codec                  = 2
+        num_values             = 1
+        data_page_offset       = 1583
+        dictionary_page_offset = 0
+        total_compressed_size  = 78
+        has_statistics         = abap_true )
+      ( row_group              = 1
+        column                 = 2
+        path                   = `ratio`
+        physical_type          = 5
+        codec                  = 2
+        num_values             = 1
+        data_page_offset       = 1661
+        dictionary_page_offset = 0
+        total_compressed_size  = 78
+        has_statistics         = abap_true )
+      ( row_group              = 1
+        column                 = 3
+        path                   = `small`
+        physical_type          = 4
+        codec                  = 2
+        num_values             = 1
+        data_page_offset       = 1739
+        dictionary_page_offset = 0
+        total_compressed_size  = 58
+        has_statistics         = abap_true )
+      ( row_group              = 1
+        column                 = 4
+        path                   = `flag`
+        physical_type          = 0
+        codec                  = 2
+        num_values             = 1
+        data_page_offset       = 1797
+        dictionary_page_offset = 0
+        total_compressed_size  = 48
+        has_statistics         = abap_true )
+      ( row_group              = 1
+        column                 = 5
+        path                   = `name`
+        physical_type          = 6
+        codec                  = 2
+        num_values             = 1
+        data_page_offset       = 1845
+        dictionary_page_offset = 0
+        total_compressed_size  = 53
+        has_statistics         = abap_true )
+      ( row_group              = 1
+        column                 = 6
+        path                   = `raw`
+        physical_type          = 6
+        codec                  = 2
+        num_values             = 1
+        data_page_offset       = 1898
+        dictionary_page_offset = 0
+        total_compressed_size  = 41
+        has_statistics         = abap_true )
+      ( row_group              = 1
+        column                 = 7
+        path                   = `day`
+        physical_type          = 1
+        codec                  = 2
+        num_values             = 1
+        data_page_offset       = 1939
+        dictionary_page_offset = 0
+        total_compressed_size  = 58
+        has_statistics         = abap_true )
+      ( row_group              = 1
+        column                 = 8
+        path                   = `ts`
+        physical_type          = 2
+        codec                  = 2
+        num_values             = 1
+        data_page_offset       = 1997
+        dictionary_page_offset = 0
+        total_compressed_size  = 78
+        has_statistics         = abap_true )
+      ( row_group              = 1
+        column                 = 9
+        path                   = `amount`
+        physical_type          = 7
+        codec                  = 2
+        num_values             = 1
+        data_page_offset       = 2075
+        dictionary_page_offset = 0
+        total_compressed_size  = 58
+        has_statistics         = abap_true )
+    ).
+    lines = VALUE #(
+      ( `504152311506150C150C5C150215001502150015041500121C1804010000001804010000001600280401000000180401` )
+      ( `00000011110000000201010000001506150C150C5C150215001502150015041500121C18040200000018040200000016` )
+      ( `0028040200000018040200000011110000000201020000001506150C150C5C150215001502150015041500121C180403` )
+      ( `000000180403000000160028040300000018040300000011110000000201030000001506151415145C15021500150215` )
+      ( `0015041500121C1808FFFFFFFFFFFFFFFF1808FFFFFFFFFFFFFFFF16002808FFFFFFFFFFFFFFFF1808FFFFFFFFFFFFFF` )
+      ( `FF11110000000201FFFFFFFFFFFFFFFF1506151415145C150215001502150015041500121C1808000000000000000018` )
+      ( `080000000000000000160028080000000000000000180800000000000000001111000000020100000000000000001506` )
+      ( `151415145C150215001502150015041500121C1808000000000001000018080000000000010000160028080000000000` )
+      ( `010000180800000000000100001111000000020100000000000100001506151415145C15021500150215001504150012` )
+      ( `1C1808000000000000E03F1808000000000000E03F16002808000000000000E03F1808000000000000E03F1111000000` )
+      ( `0201000000000000E03F1506151415145C150415021504150015041500121C1808000000000000F4BF18080000000000` )
+      ( `00F4BF16022808000000000000F4BF1808000000000000F4BF11110000000302000000000000F4BF1506150C150C5C15` )
+      ( `0215001502150015041500121C18040000C03F18040000C03F160028040000C03F18040000C03F111100000002010000` )
+      ( `C03F1506150C150C5C150215001502150015041500121C18040000004018040000004016002804000000401804000000` )
+      ( `4011110000000201000000401506150415045C150215021502150015041500121C360200000002001506151015105C15` )
+      ( `0215001502150615041500121C1801011801011600280101180101111100000002010200000002011506151015105C15` )
+      ( `0215001502150615041500121C1801001801001600280100180100111100000002010200000002001506150C150C5C15` )
+      ( `0215021502150615041500121C36020000000200000000001506151615165C150215001502150015041500121C360028` )
+      ( `05616C7068611805616C7068611111000000020105000000616C7068611506151415145C150215001502150015041500` )
+      ( `121C36002804626574611804626574611111000000020104000000626574611506150415045C15021502150215001504` )
+      ( `1500121C360200000002001506151015105C150215001502150015041500121C36002802000118020001111100000002` )
+      ( `010200000000011506150C150C5C150215001502150015041500121C3600280018001111000000020100000000150615` )
+      ( `0415045C150215021502150015041500121C360200000002001506150C150C5C150215001502150015041500121C1804` )
+      ( `464D00001804464D000016002804464D00001804464D000011110000000201464D00001506150C150C5C150415021504` )
+      ( `150015041500121C18040000000018040000000016022804000000001804000000001111000000030200000000150615` )
+      ( `1415145C150215001502150015041500121C180800000000000000001808000000000000000016002808000000000000` )
+      ( `0000180800000000000000001111000000020100000000000000001506151415145C150215001502150015041500121C` )
+      ( `180800401E18240A0600180800401E18240A06001600280800401E18240A0600180800401E18240A0600111100000002` )
+      ( `0100401E18240A06001506150415045C150215021502150015041500121C360200000002001506150C150C5C15021500` )
+      ( `1502150015041500121C1804000004D21804000004D216002804000004D21804000004D211110000000201000004D215` )
+      ( `06150C150C5C150215001502150015041500121C1804FFFFFFFF1804FFFFFFFF16002804FFFFFFFF1804FFFFFFFF1111` )
+      ( `0000000201FFFFFFFF1506150415045C150215021502150015041500121C360200000002001506150C150C5C15021500` )
+      ( `1502150015041500121C1804040000001804040000001600280404000000180404000000111100000002010400000015` )
+      ( `06151415145C150215001502150015041500121C18080000000000000080180800000000000000801600280800000000` )
+      ( `00000080180800000000000000801111000000020100000000000000801506151415145C150215001502150015041500` )
+      ( `121C18089C7500883CE4377E18089C7500883CE4377E160028089C7500883CE4377E18089C7500883CE4377E11110000` )
+      ( `0002019C7500883CE4377E1506150C150C5C150215001502150015041500121C18040000000018040000008016002804` )
+      ( `0000000018040000008011110000000201000000801506151015105C150215001502150615041500121C180101180101` )
+      ( `1600280101180101111100000002010200000002011506151615165C150215001502150015041500121C36002805C3A4` )
+      ( `E282AC1805C3A4E282AC1111000000020105000000C3A4E282AC1506150E150E5C150215001502150015041500121C36` )
+      ( `002801FF1801FF1111000000020101000000FF1506150C150C5C150215001502150015041500121C1804C606F5FF1804` )
+      ( `C606F5FF16002804C606F5FF1804C606F5FF11110000000201C606F5FF1506151415145C150215001502150015041500` )
+      ( `121C1808FFFFFFFFFFFFFFFF1808FFFFFFFFFFFFFFFF16002808FFFFFFFFFFFFFFFF1808FFFFFFFFFFFFFFFF11110000` )
+      ( `000201FFFFFFFFFFFFFFFF1506150C150C5C150215001502150015041500121C18043B9AC9FF18043B9AC9FF16002804` )
+      ( `3B9AC9FF18043B9AC9FF111100000002013B9AC9FF150419BC35001806736368656D6115140015022502180269640015` )
+      ( `042502180362696700150A25021805726174696F00150825021805736D616C6C00150025021804666C616700150C2502` )
+      ( `18046E616D6525004C1C000000150C2502180372617700150225021803646179250C4C6C000000150425021802747325` )
+      ( `144C8C111C2C0000000000150E150815021806616D6F756E74250A150415122C5C150415120000001608192C19AC2600` )
+      ( `1C15021925060019180269641504160616DC0216DC0226083C1804030000001804010000001600280403000000180401` )
+      ( `000000111100191C150015001506003C29061926000600000026001C1504192506001918036269671504160616D40316` )
+      ( `D40326E4023C180800000000000100001808FFFFFFFFFFFFFFFF1600280800000000000100001808FFFFFFFFFFFFFFFF` )
+      ( `111100191C150015001506003C29061926000600000026001C150A19250600191805726174696F1504160616B80216B8` )
+      ( `0226B8063C1808000000000000E03F1808000000000000F4BF16022808000000000000E03F1808000000000000F4BF11` )
+      ( `1100191C150015001504003C29061926020400000026001C150819250600191805736D616C6C1504160616A00216A002` )
+      ( `26F0083C18040000004018040000C03F160228040000004018040000C03F111100191C150015001506003C2906192602` )
+      ( `0400000026001C1500191506191804666C61671504160616800216800226900B3C180101180100160228010118010011` )
+      ( `1100191C150015061506003C29061926020400000026001C150C192506001918046E616D651504160616860216860226` )
+      ( `900D3C36022804626574611805616C706861111100191C150015001506003C161219061926020400000026001C150C19` )
+      ( `2506001918037261771504160616DC0116DC0126960F3C3602280200011800111100191C150015001506003C16041906` )
+      ( `1926020400000026001C1502192506001918036461791504160616E80116E80126F2103C1804464D0000180400000000` )
+      ( `16022804464D0000180400000000111100191C150015001504003C29061926020400000026001C150419250600191802` )
+      ( `74731504160616F00216F00226DA123C180800401E18240A0600180800000000000000001602280800401E18240A0600` )
+      ( `18080000000000000000111100191C150015001506003C29061926020400000026001C150E19250600191806616D6F75` )
+      ( `6E741504160616A00216A00226CA153C1804000004D21804FFFFFFFF16022804000004D21804FFFFFFFF111100191C15` )
+      ( `0015001506003C29061926020400000016E2171606260816E2170019AC26001C15021925060019180269641504160216` )
+      ( `74167426EA173C1804040000001804040000001600280404000000180404000000111100191C150015001502003C2906` )
+      ( `1926000200000026001C15041925060019180362696715041602169C01169C0126DE183C180800000000000000801808` )
+      ( `000000000000008016002808000000000000008018080000000000000080111100191C150015001502003C2906192600` )
+      ( `0200000026001C150A19250600191805726174696F15041602169C01169C0126FA193C18089C7500883CE4377E18089C` )
+      ( `7500883CE4377E160028089C7500883CE4377E18089C7500883CE4377E111100191C150015001502003C290619260002` )
+      ( `00000026001C150819250600191805736D616C6C150416021674167426961B3C18040000000018040000008016002804` )
+      ( `00000000180400000080111100191C150015001502003C29061926000200000026001C1500191506191804666C616715` )
+      ( `04160216601660268A1C3C1801011801011600280101180101111100191C150015061502003C29061926000200000026` )
+      ( `001C150C192506001918046E616D6515041602166A166A26EA1C3C36002805C3A4E282AC1805C3A4E282AC111100191C` )
+      ( `150015001502003C160A19061926000200000026001C150C19250600191803726177150416021652165226D41D3C3600` )
+      ( `2801FF1801FF111100191C150015001502003C160219061926000200000026001C150219250600191803646179150416` )
+      ( `021674167426A61E3C1804C606F5FF1804C606F5FF16002804C606F5FF1804C606F5FF111100191C150015001502003C` )
+      ( `29061926000200000026001C150419250600191802747315041602169C01169C01269A1F3C1808FFFFFFFFFFFFFFFF18` )
+      ( `08FFFFFFFFFFFFFFFF16002808FFFFFFFFFFFFFFFF1808FFFFFFFFFFFFFFFF111100191C150015001502003C29061926` )
+      ( `000200000026001C150E19250600191806616D6F756E74150416021674167426B6203C18043B9AC9FF18043B9AC9FF16` )
+      ( `0028043B9AC9FF18043B9AC9FF111100191C150015001502003C29061926000200000016C009160226EA1716C0090019` )
+      ( `1C180C4152524F573A736368656D611880062F2F2F2F2F7A674341414151414141414141414B41417741426741464141` )
+      ( `674143674141414141424241414D41414141434141494141414142414149414141414241414141416F41414144554151` )
+      ( `41416C41454141474142414141774151414141414541414E514141414373414141416741414141454141414141454141` )
+      ( `41415A50372F2F7741414151635141414141494141414141514141414141414141414267414141474674623356756441` )
+      ( `41414341414D4141514143414149414141414351414141414941414143632F762F2F4141414243684141414141634141` )
+      ( `41414241414141414141414141434141414164484D414141674144414147414167414341414141414141416741454141` )
+      ( `41414177414141465655517744592F762F2F414141424342414141414155414141414241414141414141414141444141` )
+      ( `41415A47463541444C2F2F2F38414141414141502F2F2F77414141515151414141414641414141415141414141414141` )
+      ( `41414177414141484A68647743772F2F2F2F4A502F2F2F77414141515551414141414741414141415141414141414141` )
+      ( `41414241414141473568625755414141414132502F2F2F307A2F2F2F3841414145474541414141427741414141454141` )
+      ( `414141414141414151414141426D6247466E4141414141415141424141454141414165502F2F2F77414141514D514141` )
+      ( `4141474141414141514141414141414141414251414141484E74595778734141414131762F2F2F7741414151436B2F2F` )
+      ( `2F2F4141414241784141414141634141414142414141414141414141414641414141636D463061573841426741494141` )
+      ( `59414267414141414141416744552F2F2F2F414141424168414141414155414141414241414141414141414141444141` )
+      ( `4141596D6C6E414D542F2F2F384141414142514141414142414146414149414159414277414D41414141454141514141` )
+      ( `414141414142416841414141416341414141424141414141414141414143414141416157514141416741444141494141` )
+      ( `634143414141414141414141456741414141001820706172717565742D6370702D6172726F772076657273696F6E2032` )
+      ( `362E302E3119AC1C00001C00001C00001C00001C00001C00001C00001C00001C00001C000000310A000050415231` )
+    ).
+    result-data = from_hex( lines ).
+  ENDMETHOD.
+
   METHOD pa_index_crc_bloom.
     DATA lines TYPE string_table.
 
@@ -1209,6 +1739,228 @@ CLASS zparq2a_cl_golden IMPLEMENTATION.
       ( `61546741414167414441414941416341434141414141414141414549414141414141414141413D3D0018207061727175` )
       ( `65742D6370702D6172726F772076657273696F6E2032362E302E3119CC1C00001C00001C00001C00001C00001C00001C` )
       ( `00001C00001C00001C00001C00001C000000380A000050415231` )
+    ).
+    result-data = from_hex( lines ).
+  ENDMETHOD.
+
+  METHOD pa_logical_plain.
+    DATA lines TYPE string_table.
+
+    result-name = `pa_logical_plain`.
+    result-footer_length = 2475.
+    result-created_by = `parquet-cpp-arrow version 26.0.1`.
+    result-num_rows = 2.
+    result-num_row_groups = 1.
+    result-leaf_columns = VALUE #(
+      ( `i8` )
+      ( `u16` )
+      ( `u64` )
+      ( `t_ms` )
+      ( `t_ns` )
+      ( `ts_ns` )
+      ( `ts_ms_tz` )
+      ( `fixed` )
+      ( `dec38` )
+      ( `half` )
+      ( `uuid` )
+      ( `empty` )
+    ).
+    result-key_value_keys = VALUE #(
+      ( `ARROW:schema` )
+    ).
+    result-columns = VALUE #(
+      ( row_group              = 0
+        column                 = 0
+        path                   = `i8`
+        physical_type          = 1
+        codec                  = 0
+        num_values             = 2
+        data_page_offset       = 4
+        dictionary_page_offset = 0
+        total_compressed_size  = 61
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 1
+        path                   = `u16`
+        physical_type          = 1
+        codec                  = 0
+        num_values             = 2
+        data_page_offset       = 65
+        dictionary_page_offset = 0
+        total_compressed_size  = 49
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 2
+        path                   = `u64`
+        physical_type          = 2
+        codec                  = 0
+        num_values             = 2
+        data_page_offset       = 114
+        dictionary_page_offset = 0
+        total_compressed_size  = 65
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 3
+        path                   = `t_ms`
+        physical_type          = 1
+        codec                  = 0
+        num_values             = 2
+        data_page_offset       = 179
+        dictionary_page_offset = 0
+        total_compressed_size  = 61
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 4
+        path                   = `t_ns`
+        physical_type          = 2
+        codec                  = 0
+        num_values             = 2
+        data_page_offset       = 240
+        dictionary_page_offset = 0
+        total_compressed_size  = 85
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 5
+        path                   = `ts_ns`
+        physical_type          = 2
+        codec                  = 0
+        num_values             = 2
+        data_page_offset       = 325
+        dictionary_page_offset = 0
+        total_compressed_size  = 85
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 6
+        path                   = `ts_ms_tz`
+        physical_type          = 2
+        codec                  = 0
+        num_values             = 2
+        data_page_offset       = 410
+        dictionary_page_offset = 0
+        total_compressed_size  = 85
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 7
+        path                   = `fixed`
+        physical_type          = 7
+        codec                  = 0
+        num_values             = 2
+        data_page_offset       = 495
+        dictionary_page_offset = 0
+        total_compressed_size  = 49
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 8
+        path                   = `dec38`
+        physical_type          = 7
+        codec                  = 0
+        num_values             = 2
+        data_page_offset       = 544
+        dictionary_page_offset = 0
+        total_compressed_size  = 133
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 9
+        path                   = `half`
+        physical_type          = 7
+        codec                  = 0
+        num_values             = 2
+        data_page_offset       = 677
+        dictionary_page_offset = 0
+        total_compressed_size  = 49
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 10
+        path                   = `uuid`
+        physical_type          = 7
+        codec                  = 0
+        num_values             = 2
+        data_page_offset       = 726
+        dictionary_page_offset = 0
+        total_compressed_size  = 97
+        has_statistics         = abap_true )
+      ( row_group              = 0
+        column                 = 11
+        path                   = `empty`
+        physical_type          = 1
+        codec                  = 0
+        num_values             = 2
+        data_page_offset       = 823
+        dictionary_page_offset = 0
+        total_compressed_size  = 25
+        has_statistics         = abap_false )
+    ).
+    lines = VALUE #(
+      ( `504152311500151C151C2C15041500150615061C18047F000000180480FFFFFF160028047F000000180480FFFFFF1111` )
+      ( `00000002000000040180FFFFFF7F0000001500151C151C2C15041500150615061C36002804FFFF000018040000000011` )
+      ( `1100000002000000040100000000FFFF00001500152C152C2C15041500150615061C36002808FFFFFFFFFFFFFFFF1808` )
+      ( `000000000000000011110000000200000004010000000000000000FFFFFFFFFFFFFFFF1500151C151C2C150415001506` )
+      ( `15061C1804FF5B260518040000000016002804FF5B2605180400000000111100000002000000040100000000FF5B2605` )
+      ( `1500152C152C2C15041500150615061C1808FFFF4E91944E00001808000000000000000016002808FFFF4E91944E0000` )
+      ( `1808000000000000000011110000000200000004010000000000000000FFFF4E91944E00001500152C152C2C15041500` )
+      ( `150615061C18080100000000000000180800000000000000001600280801000000000000001808000000000000000011` )
+      ( `11000000020000000401000000000000000001000000000000001500152C152C2C15041500150615061C180801000000` )
+      ( `000000001808000000000000000016002808010000000000000018080000000000000000111100000002000000040100` )
+      ( `0000000000000001000000000000001500151C151C2C15041500150615061C360028047778797A180461626364111100` )
+      ( `0000020000000401616263647778797A1500154C154C2C15041500150615061C18100000000000000000000000037E11` )
+      ( `D6001810FFFFFFFFFFFFFFFFFFFFFFFAC2E53F00160028100000000000000000000000037E11D6001810FFFFFFFFFFFF` )
+      ( `FFFFFFFFFFFAC2E53F0011110000000200000004010000000000000000000000037E11D600FFFFFFFFFFFFFFFFFFFFFF` )
+      ( `FAC2E53F001500151415142C15041500150615061C1802003C180200C016002802003C180200C0111100000002000000` )
+      ( `0401003C00C01500154C154C2C15041500150615061C3600281002020202020202020202020202020202181001010101` )
+      ( `010101010101010101010101111100000002000000040101010101010101010101010101010101020202020202020202` )
+      ( `020202020202021500150C150C2C15041500150615061C000000020000000400150419DC35001806736368656D611518` )
+      ( `001502250218026938251E4CAC13081100000015022502180375313625184CAC13101200000015042502180375363425` )
+      ( `1C4CAC134012000000150225021804745F6D736C7C121C1C0000000000150425021804745F6E736C7C121C3C00000000` )
+      ( `0015042502180574735F6E736C8C121C3C000000000015042502180874735F6D735F747A25124C8C111C1C0000000000` )
+      ( `150E150815021805666978656400150E1520150218056465633338250A1514154C2C5C1514154C000000150E15041502` )
+      ( `180468616C666CFC000000150E152015021804757569646CEC000000150225021805656D7074796CBC0000001604191C` )
+      ( `19CC26001C150219250600191802693815001604167A167A26083C18047F000000180480FFFFFF160028047F00000018` )
+      ( `0480FFFFFF111100191C150015001502003C29061926000400000026001C150219250600191803753136150016041662` )
+      ( `16622682013C36002804FFFF0000180400000000111100191C150015001502003C29061926000400000026001C150419` )
+      ( `2506001918037536341500160416820116820126E4013C36002808FFFFFFFFFFFFFFFF18080000000000000000111100` )
+      ( `191C150015001502003C29061926000400000026001C150219250600191804745F6D7315001604167A167A26E6023C18` )
+      ( `04FF5B260518040000000016002804FF5B2605180400000000111100191C150015001502003C29061926000400000026` )
+      ( `001C150419250600191804745F6E731500160416AA0116AA0126E0033C1808FFFF4E91944E0000180800000000000000` )
+      ( `0016002808FFFF4E91944E000018080000000000000000111100191C150015001502003C29061926000400000026001C` )
+      ( `15041925060019180574735F6E731500160416AA0116AA01268A053C1808010000000000000018080000000000000000` )
+      ( `16002808010000000000000018080000000000000000111100191C150015001502003C29061926000400000026001C15` )
+      ( `041925060019180874735F6D735F747A1500160416AA0116AA0126B4063C180801000000000000001808000000000000` )
+      ( `000016002808010000000000000018080000000000000000111100191C150015001502003C2906192600040000002600` )
+      ( `1C150E192506001918056669786564150016041662166226DE073C360028047778797A180461626364111100191C1500` )
+      ( `15001502003C29061926000400000026001C150E19250600191805646563333815001604168A02168A0226C0083C1810` )
+      ( `0000000000000000000000037E11D6001810FFFFFFFFFFFFFFFFFFFFFFFAC2E53F001600281000000000000000000000` )
+      ( `00037E11D6001810FFFFFFFFFFFFFFFFFFFFFFFAC2E53F00111100191C150015001502003C2906192600040000002600` )
+      ( `1C150E1925060019180468616C66150016041662166226CA0A3C1802003C180200C016002802003C180200C011110019` )
+      ( `1C150015001502003C29061926000400000026001C150E19250600191804757569641500160416C20116C20126AC0B3C` )
+      ( `3600281002020202020202020202020202020202181001010101010101010101010101010101111100191C1500150015` )
+      ( `02003C29061926000400000026001C150219250600191805656D707479150016041632163226EE0C491C150015001502` )
+      ( `003C29061926040000000016980D1604260816980D00191C180C4152524F573A736368656D6118F8082F2F2F2F2F3141` )
+      ( `4441414151414141414141414B41417741426741464141674143674141414141424241414D4141414143414149414141` )
+      ( `41424141494141414142414141414177414141446F416741417041494141486743414142494167414144414941414E67` )
+      ( `424141434D41514141584145414143414241414430414141415341414141415141414142592F662F2F41414142415241` )
+      ( `414141416341414141424141414141414141414146414141415A57317764486B41414141454141594142414141414141` )
+      ( `41456741594141674142674148414177414141415141425141456741414141414141513855414141416C414141414167` )
+      ( `41414141554141414141414141414151414141423164576C6B4141414141414941414141384141414142414141414544` )
+      ( `2F2F2F385141414141424141414141414141414141414141414741414141454653556B39584F6D56346447567563326C` )
+      ( `76626A70745A5852685A47463059514141414142302F2F2F2F47414141414151414141414B4141414159584A79623363` )
+      ( `75645856705A4141414641414141454653556B39584F6D56346447567563326C76626A70755957316C41414141414562` )
+      ( `2B2F2F3851414141415150372F2F77414141514D51414141414741414141415141414141414141414142414141414768` )
+      ( `6862475941414141417850372F2F326A2B2F2F3841414145484541414141434141414141454141414141414141414155` )
+      ( `414141426B5A574D7A4F41414141416741444141454141674143414141414359414141414B414141416F50372F2F7741` )
+      ( `414151385141414141474141414141514141414141414141414251414141475A706547566B414141413076372F2F7751` )
+      ( `414141444D2F762F2F414141424368414141414163414141414241414141414141414141494141414164484E6662584E` )
+      ( `6664486F41414141416A502F2F2F77414141514145414141414451414141455631636D39775A5339435A584A73615734` )
+      ( `41414141552F2F2F2F414141424368414141414163414141414241414141414141414141464141414164484E66626E4D` )
+      ( `4142674149414159414267414141414141417742452F2F2F2F4141414243524141414141674141414142414141414141` )
+      ( `4141414145414141416446397563774141414141494141774142674149414167414141414141414D415141414141487A` )
+      ( `2F2F2F38414141454A454141414142774141414145414141414141414141415141414142305832317A41414141414151` )
+      ( `41424141454141414171502F2F2F77414141514951414141414641414141415141414141414141414141774141414855` )
+      ( `324E4144572F2F2F2F51414141414E442F2F2F384141414543454141414142774141414145414141414141414141414D` )
+      ( `41414142314D54594141414147414167414241414741414141454141414142414146414149414159414277414D414141` )
+      ( `414541415141414141414141424168414141414163414141414241414141414141414141434141414161546741414167` )
+      ( `414441414941416341434141414141414141414549414141414141414141413D3D001820706172717565742D6370702D` )
+      ( `6172726F772076657273696F6E2032362E302E3119CC1C00001C00001C00001C00001C00001C00001C00001C00001C00` )
+      ( `001C00001C00001C000000AB09000050415231` )
     ).
     result-data = from_hex( lines ).
   ENDMETHOD.

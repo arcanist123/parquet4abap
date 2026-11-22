@@ -23,6 +23,8 @@ CLASS ltcl_schema DEFINITION FINAL
     METHODS root_element FOR TESTING RAISING zparq2a_cx_error.
     METHODS decimal_lengths FOR TESTING.
     METHODS unsupported_line_types FOR TESTING.
+    METHODS gregorian_days FOR TESTING RAISING zparq2a_cx_error.
+    METHODS invalid_dates FOR TESTING.
 
     METHODS assert_column
       IMPORTING
@@ -250,6 +252,53 @@ CLASS ltcl_schema IMPLEMENTATION.
     TRY.
         zparq2a_cl_schema=>from_table( decfloats ).
         cl_abap_unit_assert=>fail( `DECFLOAT34 was accepted` ).
+      CATCH zparq2a_cx_error ##NO_HANDLER.
+    ENDTRY.
+  ENDMETHOD.
+
+  METHOD gregorian_days.
+    TYPES:
+      BEGIN OF ty_case,
+        date TYPE d,
+        days TYPE i,
+      END OF ty_case.
+    DATA cases TYPE STANDARD TABLE OF ty_case WITH EMPTY KEY.
+
+    " proleptic Gregorian also before 1582-10-15, as pyarrow counts
+    cases = VALUE #( ( date = '19700101' days = 0 )
+                     ( date = '19691231' days = -1 )
+                     ( date = '20240229' days = 19782 )
+                     ( date = '20000301' days = 11017 )
+                     ( date = '19000101' days = -25567 )
+                     ( date = '16000301' days = -135080 )
+                     ( date = '15821015' days = -141427 )
+                     ( date = '15821004' days = -141438 )
+                     ( date = '00010101' days = -719162 )
+                     ( date = '99991231' days = 2932896 ) ).
+    LOOP AT cases INTO DATA(case).
+      cl_abap_unit_assert=>assert_equals( act = zparq2a_cl_schema=>days_from_date( case-date )
+                                          exp = case-days
+                                          msg = |{ case-date }| ).
+      cl_abap_unit_assert=>assert_equals( act = zparq2a_cl_schema=>date_from_days( CONV #( case-days ) )
+                                          exp = case-date
+                                          msg = |{ case-days }| ).
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD invalid_dates.
+    TRY.
+        zparq2a_cl_schema=>days_from_date( '00000000' ).
+        cl_abap_unit_assert=>fail( `The initial date was accepted` ).
+      CATCH zparq2a_cx_error ##NO_HANDLER.
+    ENDTRY.
+    TRY.
+        zparq2a_cl_schema=>days_from_date( '20241301' ).
+        cl_abap_unit_assert=>fail( `Month 13 was accepted` ).
+      CATCH zparq2a_cx_error ##NO_HANDLER.
+    ENDTRY.
+    TRY.
+        zparq2a_cl_schema=>date_from_days( 2932897 ).
+        cl_abap_unit_assert=>fail( `A date after 9999-12-31 was accepted` ).
       CATCH zparq2a_cx_error ##NO_HANDLER.
     ENDTRY.
   ENDMETHOD.
