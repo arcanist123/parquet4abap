@@ -300,7 +300,7 @@ Every issue below has a minimal reproduction.
 | abaplint transpiler | [#2231](https://github.com/abaplint/transpiler/issues/2231) `int8` with `f` operands is calculated as `int8` | Open | [#2237](https://github.com/abaplint/transpiler/pull/2237), open |
 | abaplint transpiler | [#2232](https://github.com/abaplint/transpiler/issues/2232) A text literal passed to `xsequence` works on characters | Fixed | [#2236](https://github.com/abaplint/transpiler/pull/2236), merged |
 | abaplint transpiler | [#2234](https://github.com/abaplint/transpiler/issues/2234) `**` is left-associative | Fixed | [#2235](https://github.com/abaplint/transpiler/pull/2235), merged |
-| abaplint transpiler | [#2242](https://github.com/abaplint/transpiler/issues/2242) `int8` assigned to `d` or `t` fails | Open | |
+| abaplint transpiler | [#2242](https://github.com/abaplint/transpiler/issues/2242) `int8` assigned to `d` or `t` fails | Open | [#2243](https://github.com/abaplint/transpiler/pull/2243), open |
 | abaplint transpiler | [#2250](https://github.com/abaplint/transpiler/issues/2250) `/` with an `int8` operand and a `p` target drops the fraction | Open | |
 | abaplint transpiler | [#2251](https://github.com/abaplint/transpiler/issues/2251) Appending to an `xstring` with `CONCATENATE IN BYTE MODE` is quadratic | Open | [#2252](https://github.com/abaplint/transpiler/pull/2252), open |
 | open-abap-core | [#1346](https://github.com/open-abap/open-abap-core/issues/1346) The referenced type of `REF TO data` is not a `CL_ABAP_ELEMDESCR` | Fixed | [#1347](https://github.com/open-abap/open-abap-core/pull/1347), merged |

@@ -2,7 +2,7 @@
   "abaplint-transpiler": {
     "repo": "https://github.com/arcanist123/transpiler",
     "branch": "parquet4abap",
-    "commit": "e6e0a6b7bc4dc0d04e752a44dea579dadee89817",
+    "commit": "b3693d3294917dbd99b7699d3211dc4f12b693f5",
     "upstream": "https://github.com/abaplint/transpiler",
     "unmergedPullRequests": [
       "https://github.com/abaplint/transpiler/pull/2151",
