@@ -16,7 +16,7 @@ The goal of **parquet4abap** is to read and write Parquet files directly in ABAP
 | Area | Status |
 |------|--------|
 | File structure (magic bytes, footer, row groups, column chunks, pages) | Planned |
-| Thrift Compact Protocol (file metadata) | Planned |
+| Thrift Compact Protocol (file metadata, page headers) | Done |
 | Encodings: PLAIN, RLE / bit-packing hybrid, dictionary | Planned |
 | Compression: uncompressed, GZIP | Planned |
 | Compression: Snappy, ZSTD | Under consideration |
@@ -63,6 +63,20 @@ pass. The file has one section per toolchain: `abaplint-transpiler` and `open-st
 `tools/toolchains.lock.json`, sets it up, compiles the tests to Go and writes the result to
 `results/osg-go-unit.json`. It works on Linux, macOS and native Windows. On Windows the runner adds the
 workarounds in `tools/osg-win-paths.mjs` and `tools/osg-windows.patch`.
+
+## Golden files
+
+`testdata/golden/` holds small Parquet files written by pyarrow and DuckDB, each with a JSON file that
+says what pyarrow reads from it. `tools/golden/generate.py` writes them, and also writes
+`src/zparq2a_cl_golden.clas.abap`, a class for tests only that embeds the files, so the ABAP Unit
+tests need no file access. To regenerate them with the versions pinned in
+`tools/golden/requirements.txt`:
+
+```sh
+python -m venv tools/.venv
+tools/.venv/Scripts/pip install -r tools/golden/requirements.txt   # Linux, macOS: tools/.venv/bin/pip
+tools/.venv/Scripts/python tools/golden/generate.py
+```
 
 ## Status
 

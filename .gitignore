@@ -4,3 +4,5 @@ deps/
 tools/open-steamgate/
 tools/transpiler/
 results/
+tools/.venv/
+__pycache__/

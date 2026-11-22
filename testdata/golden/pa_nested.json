@@ -1,0 +1,93 @@
+{
+  "writer": "pyarrow",
+  "size": 1855,
+  "footer_length": 1435,
+  "created_by": "parquet-cpp-arrow version 26.0.1",
+  "format_version": "2.6",
+  "num_rows": 3,
+  "num_row_groups": 1,
+  "row_group_rows": [
+    3
+  ],
+  "leaf_columns": [
+    "tags.list.element",
+    "point.x",
+    "point.y",
+    "attrs.key_value.key",
+    "attrs.key_value.value"
+  ],
+  "key_value_keys": [
+    "ARROW:schema"
+  ],
+  "columns": [
+    {
+      "row_group": 0,
+      "column": 0,
+      "path": "tags.list.element",
+      "physical_type": "BYTE_ARRAY",
+      "codec": "UNCOMPRESSED",
+      "num_values": 4,
+      "data_page_offset": 28,
+      "dictionary_page_offset": 4,
+      "total_compressed_size": 69,
+      "total_uncompressed_size": 69,
+      "has_statistics": true
+    },
+    {
+      "row_group": 0,
+      "column": 1,
+      "path": "point.x",
+      "physical_type": "INT32",
+      "codec": "UNCOMPRESSED",
+      "num_values": 3,
+      "data_page_offset": 95,
+      "dictionary_page_offset": 73,
+      "total_compressed_size": 79,
+      "total_uncompressed_size": 79,
+      "has_statistics": true
+    },
+    {
+      "row_group": 0,
+      "column": 2,
+      "path": "point.y",
+      "physical_type": "DOUBLE",
+      "codec": "UNCOMPRESSED",
+      "num_values": 3,
+      "data_page_offset": 174,
+      "dictionary_page_offset": 152,
+      "total_compressed_size": 95,
+      "total_uncompressed_size": 95,
+      "has_statistics": true
+    },
+    {
+      "row_group": 0,
+      "column": 3,
+      "path": "attrs.key_value.key",
+      "physical_type": "BYTE_ARRAY",
+      "codec": "UNCOMPRESSED",
+      "num_values": 3,
+      "data_page_offset": 266,
+      "dictionary_page_offset": 247,
+      "total_compressed_size": 64,
+      "total_uncompressed_size": 64,
+      "has_statistics": true
+    },
+    {
+      "row_group": 0,
+      "column": 4,
+      "path": "attrs.key_value.value",
+      "physical_type": "INT64",
+      "codec": "UNCOMPRESSED",
+      "num_values": 3,
+      "data_page_offset": 333,
+      "dictionary_page_offset": 311,
+      "total_compressed_size": 101,
+      "total_uncompressed_size": 101,
+      "has_statistics": true
+    }
+  ],
+  "generator": {
+    "pyarrow": "26.0.1",
+    "duckdb": "2.0.1"
+  }
+}

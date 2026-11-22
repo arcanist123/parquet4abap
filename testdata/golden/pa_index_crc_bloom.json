@@ -1,0 +1,163 @@
+{
+  "writer": "pyarrow",
+  "size": 3212,
+  "footer_length": 2028,
+  "created_by": "parquet-cpp-arrow version 26.0.1",
+  "format_version": "2.6",
+  "num_rows": 4,
+  "num_row_groups": 1,
+  "row_group_rows": [
+    4
+  ],
+  "leaf_columns": [
+    "id",
+    "big",
+    "ratio",
+    "small",
+    "flag",
+    "name",
+    "raw",
+    "day",
+    "ts",
+    "amount"
+  ],
+  "key_value_keys": [
+    "ARROW:schema"
+  ],
+  "columns": [
+    {
+      "row_group": 0,
+      "column": 0,
+      "path": "id",
+      "physical_type": "INT32",
+      "codec": "UNCOMPRESSED",
+      "num_values": 4,
+      "data_page_offset": 40,
+      "dictionary_page_offset": 4,
+      "total_compressed_size": 69,
+      "total_uncompressed_size": 69,
+      "has_statistics": true
+    },
+    {
+      "row_group": 0,
+      "column": 1,
+      "path": "big",
+      "physical_type": "INT64",
+      "codec": "UNCOMPRESSED",
+      "num_values": 4,
+      "data_page_offset": 125,
+      "dictionary_page_offset": 73,
+      "total_compressed_size": 85,
+      "total_uncompressed_size": 85,
+      "has_statistics": true
+    },
+    {
+      "row_group": 0,
+      "column": 2,
+      "path": "ratio",
+      "physical_type": "DOUBLE",
+      "codec": "UNCOMPRESSED",
+      "num_values": 4,
+      "data_page_offset": 202,
+      "dictionary_page_offset": 158,
+      "total_compressed_size": 77,
+      "total_uncompressed_size": 77,
+      "has_statistics": true
+    },
+    {
+      "row_group": 0,
+      "column": 3,
+      "path": "small",
+      "physical_type": "FLOAT",
+      "codec": "UNCOMPRESSED",
+      "num_values": 4,
+      "data_page_offset": 267,
+      "dictionary_page_offset": 235,
+      "total_compressed_size": 65,
+      "total_uncompressed_size": 65,
+      "has_statistics": true
+    },
+    {
+      "row_group": 0,
+      "column": 4,
+      "path": "flag",
+      "physical_type": "BOOLEAN",
+      "codec": "UNCOMPRESSED",
+      "num_values": 4,
+      "data_page_offset": 300,
+      "dictionary_page_offset": null,
+      "total_compressed_size": 30,
+      "total_uncompressed_size": 30,
+      "has_statistics": true
+    },
+    {
+      "row_group": 0,
+      "column": 5,
+      "path": "name",
+      "physical_type": "BYTE_ARRAY",
+      "codec": "UNCOMPRESSED",
+      "num_values": 4,
+      "data_page_offset": 376,
+      "dictionary_page_offset": 330,
+      "total_compressed_size": 79,
+      "total_uncompressed_size": 79,
+      "has_statistics": true
+    },
+    {
+      "row_group": 0,
+      "column": 6,
+      "path": "raw",
+      "physical_type": "BYTE_ARRAY",
+      "codec": "UNCOMPRESSED",
+      "num_values": 4,
+      "data_page_offset": 444,
+      "dictionary_page_offset": 409,
+      "total_compressed_size": 68,
+      "total_uncompressed_size": 68,
+      "has_statistics": true
+    },
+    {
+      "row_group": 0,
+      "column": 7,
+      "path": "day",
+      "physical_type": "INT32",
+      "codec": "UNCOMPRESSED",
+      "num_values": 4,
+      "data_page_offset": 509,
+      "dictionary_page_offset": 477,
+      "total_compressed_size": 65,
+      "total_uncompressed_size": 65,
+      "has_statistics": true
+    },
+    {
+      "row_group": 0,
+      "column": 8,
+      "path": "ts",
+      "physical_type": "INT64",
+      "codec": "UNCOMPRESSED",
+      "num_values": 4,
+      "data_page_offset": 586,
+      "dictionary_page_offset": 542,
+      "total_compressed_size": 77,
+      "total_uncompressed_size": 77,
+      "has_statistics": true
+    },
+    {
+      "row_group": 0,
+      "column": 9,
+      "path": "amount",
+      "physical_type": "FIXED_LEN_BYTE_ARRAY",
+      "codec": "UNCOMPRESSED",
+      "num_values": 4,
+      "data_page_offset": 651,
+      "dictionary_page_offset": 619,
+      "total_compressed_size": 65,
+      "total_uncompressed_size": 65,
+      "has_statistics": true
+    }
+  ],
+  "generator": {
+    "pyarrow": "26.0.1",
+    "duckdb": "2.0.1"
+  }
+}

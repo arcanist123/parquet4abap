@@ -40,7 +40,9 @@ we write can be checked with independent tools such as pyarrow or DuckDB.
 | `ZPARQ2A_CL_BYTES` | Little-endian INT32/INT64, IEEE-754 FLOAT/DOUBLE, varint/ZigZag, UTF-8 over `xstring` |
 | `ZPARQ2A_CL_BYTE_READER` / `ZPARQ2A_CL_BYTE_WRITER` | Sequential reads and writes of those values |
 | `ZPARQ2A_CL_BIT_READER` / `ZPARQ2A_CL_BIT_WRITER` | Bit-packed values of 0..32 bits, least significant bit first |
-| `ZPARQ2A_CL_THRIFT` | Thrift Compact Protocol for `FileMetaData`, `SchemaElement`, `RowGroup`, `ColumnChunk`, `ColumnMetaData`, `PageHeader` |
+| `ZPARQ2A_CL_THRIFT_READER` / `ZPARQ2A_CL_THRIFT_WRITER` | Thrift Compact Protocol; fields a codec doesn't model are kept as raw bytes (`ZPARQ2A_IF_THRIFT`) |
+| `ZPARQ2A_IF_FORMAT` | Enumerations and metadata structs of `parquet.thrift` |
+| `ZPARQ2A_CL_METADATA` | Decode and encode `FileMetaData` (with `SchemaElement`, `RowGroup`, `ColumnChunk`, `ColumnMetaData`, ...) and `PageHeader` |
 | `ZPARQ2A_IF_ENCODER` | `ZPARQ2A_CL_ENC_PLAIN`, `ZPARQ2A_CL_ENC_RLE` (RLE / bit-packing hybrid for levels and dictionary indices) |
 | `ZPARQ2A_IF_COMPRESSOR` | `ZPARQ2A_CL_COMP_NONE`, `ZPARQ2A_CL_COMP_GZIP`; later pure-ABAP Snappy / ZSTD |
 | `ZPARQ2A_CL_SCHEMA` | RTTI mapping of ABAP types (`I`, `INT8`, `P`, `F`, `DECFLOAT34`, `C`, `STRING`, `X`, `XSTRING`, `D`, `T`) to Parquet physical and logical types |
