@@ -15,5 +15,20 @@
     "ZPARQ2A_CL_BYTES/LTCL_FLOATS/FLOAT_SUBNORMALS": "https://github.com/abaplint/transpiler/issues/2231 (int8 with f operands is calculated as int8)",
     "ZPARQ2A_CL_BYTE_READER/LTCL_BYTE_READER/FIXED_WIDTH_VALUES": "https://github.com/abaplint/transpiler/issues/2231 (int8 with f operands is calculated as int8)",
     "ZPARQ2A_CL_BYTES/LTCL_INTEGERS/REVERSE_BYTES": "https://github.com/abaplint/transpiler/issues/2232 (text literal to xsequence: offsets on characters)"
+  },
+  "open-steamgate-go": {
+    "ZPARQ2A_CL_BIT_READER/LTCL_BIT_READER/WIDTH_OUT_OF_RANGE": "https://github.com/oisee/open-steamgate/issues/540 (method call on NEW x( )->m( ) not compiled)",
+    "ZPARQ2A_CL_BIT_WRITER/LTCL_BIT_WRITER/VALUE_TOO_LARGE": "https://github.com/oisee/open-steamgate/issues/540 (method call on NEW x( )->m( ) not compiled)",
+    "ZPARQ2A_CL_BIT_WRITER/LTCL_BIT_WRITER/NEGATIVE_VALUE": "https://github.com/oisee/open-steamgate/issues/540 (method call on NEW x( )->m( ) not compiled)",
+    "ZPARQ2A_CL_BIT_WRITER/LTCL_BIT_WRITER/WIDTH_OUT_OF_RANGE": "https://github.com/oisee/open-steamgate/issues/540 (method call on NEW x( )->m( ) not compiled)",
+    "ZPARQ2A_CL_BYTE_READER/LTCL_BYTE_READER/INVALID_VARINTS": "https://github.com/oisee/open-steamgate/issues/540 (method call on NEW x( )->m( ) not compiled)",
+    "ZPARQ2A_CL_BYTE_READER/LTCL_BYTE_READER/NEGATIVE_LENGTH": "https://github.com/oisee/open-steamgate/issues/540 (method call on NEW x( )->m( ) not compiled)",
+    "ZPARQ2A_CL_BYTE_READER/LTCL_BYTE_READER/ZIGZAG_VARINTS": "https://github.com/oisee/open-steamgate/issues/989 (- a - 1 is calculated as - ( a - 1 ))",
+    "ZPARQ2A_CL_BYTE_WRITER/LTCL_BYTE_WRITER/ROUND_TRIP": "https://github.com/oisee/open-steamgate/issues/989 (- a - 1 is calculated as - ( a - 1 ))",
+    "ZPARQ2A_CL_BYTES/LTCL_VARINTS/ZIGZAG_EDGE_VALUES": "https://github.com/oisee/open-steamgate/issues/989 (- a - 1 is calculated as - ( a - 1 ))",
+    "ZPARQ2A_CL_BYTES/LTCL_UTF8/ASCII": "https://github.com/oisee/open-steamgate/issues/990 (CL_ABAP_CONV_CODEPAGE local classes not compiled)",
+    "ZPARQ2A_CL_BYTES/LTCL_UTF8/MULTI_BYTE": "https://github.com/oisee/open-steamgate/issues/990 (CL_ABAP_CONV_CODEPAGE local classes not compiled)",
+    "ZPARQ2A_CL_BYTES/LTCL_UTF8/EMPTY": "https://github.com/oisee/open-steamgate/issues/990 (CL_ABAP_CONV_CODEPAGE local classes not compiled)",
+    "ZPARQ2A_CL_BYTES/LTCL_UTF8/INVALID_BYTES": "https://github.com/oisee/open-steamgate/issues/990 (CL_ABAP_CONV_CODEPAGE local classes not compiled)"
   }
 }

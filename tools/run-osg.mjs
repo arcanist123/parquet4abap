@@ -9,9 +9,12 @@
 // tools/toolchains.lock.json. The checkout lives in tools/open-steamgate and is
 // not part of this repository.
 //
-// Exit code: 0 when the tests passed; otherwise the exit code of open-steamgate's
-// runner (1 test failure, 2 not compiled or error, 3 no tests), or 4 when setup
-// failed.
+// Tests listed under "open-steamgate-go" in tools/known-gaps.json fail as KNOWN
+// and do not fail the run; a known gap that passes is reported as FIXED.
+//
+// Exit code: 0 when no test failed unexpectedly; otherwise 1 for a test failure,
+// 2 for a test not compiled or an error, as open-steamgate's runner counts them
+// (3 when it found no tests), or 4 when setup failed.
 import {spawnSync} from "node:child_process";
 import {existsSync, mkdirSync, readFileSync, writeFileSync} from "node:fs";
 import {dirname, join, resolve} from "node:path";
@@ -28,6 +31,7 @@ const osgRoot = tidy(join(repoRoot, "tools", "open-steamgate"));
 const srcDir = tidy(join(repoRoot, "src"));
 const resultsDir = join(repoRoot, "results");
 const shim = join(repoRoot, "tools", "osg-win-paths.mjs");
+const knownGaps = JSON.parse(readFileSync(join(repoRoot, "tools", "known-gaps.json"), "utf8"))["open-steamgate-go"] ?? {};
 
 class SetupError extends Error {}
 
@@ -36,7 +40,7 @@ function parseArgs(argv) {
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     if (arg === "--help" || arg === "-h") {
-      console.log(readFileSync(fileURLToPath(import.meta.url), "utf8").split("\n").slice(1, 14).map((l) => l.replace(/^\/\/ ?/, "")).join("\n"));
+      console.log(readFileSync(fileURLToPath(import.meta.url), "utf8").split("\n").slice(1, 18).map((l) => l.replace(/^\/\/ ?/, "")).join("\n"));
       process.exit(0);
     } else if (arg === "--skip-setup") options.skipSetup = true;
     else if (arg === "--class") {
@@ -149,9 +153,33 @@ function runTests(env, classes) {
   try { result = JSON.parse(child.stdout.trim().split(/\r?\n/).at(-1)); }
   catch { result = {rows: [{source: "run-osg", status: "ERROR", message: child.stderr.trim() || `no JSON output (exit ${child.status})`}]}; }
 
+  // known gaps: KNOWN while they fail, FIXED once they pass
+  const rows = result.rows ?? [];
+  for (const row of rows) {
+    const gap = knownGaps[[row.class, row.testclass, row.method].join("/")];
+    if (!gap) continue;
+    row.gap = gap;
+    if (row.status === "SUCCESS") row.status = "FIXED";
+    else {
+      row.osgStatus = row.status;
+      row.status = "KNOWN";
+    }
+  }
+  const unexpected = rows.filter((r) => !["SUCCESS", "KNOWN", "FIXED"].includes(r.status));
+  const exitCode = rows.length === 0 ? child.status
+    : unexpected.some((r) => r.status !== "FAILURE") ? 2
+      : unexpected.length > 0 ? 1 : 0;
+  result.totals = {...result.totals,
+    known: rows.filter((r) => r.status === "KNOWN").length,
+    fixed: rows.filter((r) => r.status === "FIXED").length,
+    failure: rows.filter((r) => r.status === "FAILURE").length,
+    not_compiled: rows.filter((r) => r.status === "NOT_COMPILED").length,
+    error: rows.filter((r) => r.status === "ERROR").length};
+
   return {
     toolchain: "open-steamgate-go",
-    exitCode: child.status,
+    exitCode,
+    osgExitCode: child.status,
     started: started.toISOString(),
     durationMs,
     openSteamgate: {repo: lock.repo, commit: lock.commit, patches: lock.patches},
@@ -163,11 +191,11 @@ function runTests(env, classes) {
 function summarize(report) {
   const totals = report.result.totals ?? {};
   const label = report.toolchain.padEnd(20);
-  console.log(`${label} exit ${report.exitCode}  tests ${totals.tests ?? 0}  success ${totals.success ?? 0}  failure ${totals.failure ?? 0}  not_compiled ${totals.not_compiled ?? 0}  error ${totals.error ?? 0}  (${(report.durationMs / 1000).toFixed(1)} s)`);
+  console.log(`${label} exit ${report.exitCode}  tests ${totals.tests ?? 0}  success ${totals.success ?? 0}  failure ${totals.failure ?? 0}  not_compiled ${totals.not_compiled ?? 0}  error ${totals.error ?? 0}  known ${totals.known ?? 0}  fixed ${totals.fixed ?? 0}  (${(report.durationMs / 1000).toFixed(1)} s)`);
   for (const row of report.result.rows ?? []) {
     if (row.status === "SUCCESS") continue;
     const where = [row.class, row.testclass, row.method].filter(Boolean).join("/") || "run";
-    console.log(`  ${row.status} ${where}: ${String(row.message ?? "").replace(/\s+/g, " ").slice(0, 300)}`);
+    console.log(`  ${row.status} ${where}${row.gap ? ` (${row.gap})` : ""}: ${String(row.message ?? "").replace(/\s+/g, " ").slice(0, 300)}`);
   }
 }
 

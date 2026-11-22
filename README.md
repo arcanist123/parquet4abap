@@ -55,8 +55,9 @@ Run `npm install` first. `npm run unit` (part of `npm test`) clones the
 pinned in `tools/toolchains.lock.json`, builds it, and writes its result to `results/`. To try a
 fork or a branch of the transpiler instead, point it at that checkout:
 `npm run unit:local -- <dir>` uses the checkout as it is, and adding `--build` compiles it first.
-Tests listed in `tools/known-gaps.json` fail on that toolchain for a known reason; they are
-reported as `KNOWN` and don't fail the run, and as `FIXED` once they pass.
+Tests listed in `tools/known-gaps.json` fail on a toolchain for a known reason, each with its
+upstream issue. They are reported as `KNOWN` and don't fail the run, and as `FIXED` once they
+pass. The file has one section per toolchain: `abaplint-transpiler` and `open-steamgate-go`.
 
 `npm run osg` clones open-steamgate into `tools/open-steamgate` at the commit pinned in
 `tools/toolchains.lock.json`, sets it up, compiles the tests to Go and writes the result to
