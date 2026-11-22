@@ -86,6 +86,9 @@ tools/.venv/Scripts/python tools/golden/generate.py
 
 Early development. Expect the API to change.
 
+How the abaplint transpiler and open-steamgate's Go target handle this code so far is in
+[docs/comparison.md](docs/comparison.md).
+
 ## License
 
 To be defined.
