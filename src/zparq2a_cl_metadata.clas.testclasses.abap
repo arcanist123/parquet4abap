@@ -200,12 +200,20 @@ CLASS ltcl_metadata DEFINITION FINAL
         file TYPE xstring
         msg  TYPE string.
 
+    "! Value of a struct field that holds structs nested this deep
+    METHODS nested_structs
+      IMPORTING
+        structs       TYPE i
+      RETURNING
+        VALUE(result) TYPE xstring.
+
     METHODS minimal_footer FOR TESTING RAISING zparq2a_cx_error.
     METHODS unknown_fields_kept FOR TESTING RAISING zparq2a_cx_error.
     METHODS logical_types FOR TESTING RAISING zparq2a_cx_error.
     METHODS page_header_defaults FOR TESTING RAISING zparq2a_cx_error.
     METHODS invalid_files FOR TESTING RAISING zparq2a_cx_error.
     METHODS missing_required_field FOR TESTING.
+    METHODS deep_unknown_field FOR TESTING RAISING zparq2a_cx_error.
 
 ENDCLASS.
 
@@ -226,6 +234,38 @@ CLASS ltcl_metadata IMPLEMENTATION.
     TRY.
         zparq2a_cl_metadata=>read_footer( file ).
         cl_abap_unit_assert=>fail( |{ msg }: accepted| ).
+      CATCH zparq2a_cx_error ##NO_HANDLER.
+    ENDTRY.
+  ENDMETHOD.
+
+  METHOD nested_structs.
+    DATA(open) = CONV xstring( '1C' ).
+    DATA(stop) = CONV xstring( '00' ).
+
+    DO structs TIMES.
+      CONCATENATE result open INTO result IN BYTE MODE.
+    ENDDO.
+    DO structs + 1 TIMES.
+      CONCATENATE result stop INTO result IN BYTE MODE.
+    ENDDO.
+  ENDMETHOD.
+
+  METHOD deep_unknown_field.
+    " FileMetaData is level 1 and the struct in field 8 level 2, so that
+    " struct may hold max_depth - 2 nested structs
+    DATA(metadata) = minimal_file_metadata( ).
+    metadata-unknown = VALUE #( ( id    = 8
+                                  type  = zparq2a_if_thrift=>c_type-struct
+                                  value = nested_structs( zparq2a_cl_thrift_reader=>max_depth - 2 ) ) ).
+
+    DATA(encoded) = zparq2a_cl_metadata=>encode_file_metadata( metadata ).
+    cl_abap_unit_assert=>assert_equals( act = zparq2a_cl_metadata=>decode_file_metadata( encoded ) exp = metadata ).
+
+    metadata-unknown[ 1 ]-value = nested_structs( zparq2a_cl_thrift_reader=>max_depth - 1 ).
+    encoded = zparq2a_cl_metadata=>encode_file_metadata( metadata ).
+    TRY.
+        zparq2a_cl_metadata=>decode_file_metadata( encoded ).
+        cl_abap_unit_assert=>fail( `unknown field nested too deep: accepted` ).
       CATCH zparq2a_cx_error ##NO_HANDLER.
     ENDTRY.
   ENDMETHOD.

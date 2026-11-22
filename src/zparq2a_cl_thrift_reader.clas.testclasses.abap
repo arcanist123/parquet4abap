@@ -16,6 +16,26 @@ CLASS ltcl_thrift_reader DEFINITION FINAL
       RAISING
         zparq2a_cx_error.
 
+    METHODS assert_accepted
+      IMPORTING
+        bytes TYPE xstring
+        msg   TYPE string.
+
+    METHODS repeat
+      IMPORTING
+        byte          TYPE xstring
+        times         TYPE i
+      RETURNING
+        VALUE(result) TYPE xstring.
+
+    "! A struct whose field 1 holds lists nested this deep, the
+    "! innermost one an empty list of i32
+    METHODS nested_lists
+      IMPORTING
+        lists         TYPE i
+      RETURNING
+        VALUE(result) TYPE xstring.
+
     METHODS field_headers FOR TESTING RAISING zparq2a_cx_error.
     METHODS booleans FOR TESTING RAISING zparq2a_cx_error.
     METHODS integers FOR TESTING RAISING zparq2a_cx_error.
@@ -28,6 +48,8 @@ CLASS ltcl_thrift_reader DEFINITION FINAL
     METHODS required_fields FOR TESTING.
     METHODS malformed_input FOR TESTING.
     METHODS nesting_limit FOR TESTING.
+    METHODS nesting_counts_lists FOR TESTING.
+    METHODS nesting_depth_restored FOR TESTING.
 
 ENDCLASS.
 
@@ -50,6 +72,28 @@ CLASS ltcl_thrift_reader IMPLEMENTATION.
       cut->read_unknown( ).
     ENDWHILE.
     cut->read_struct_end( ).
+  ENDMETHOD.
+
+  METHOD assert_accepted.
+    TRY.
+        read_struct( bytes ).
+      CATCH zparq2a_cx_error INTO DATA(error).
+        cl_abap_unit_assert=>fail( |{ msg }: { error->get_text( ) }| ).
+    ENDTRY.
+  ENDMETHOD.
+
+  METHOD repeat.
+    DO times TIMES.
+      CONCATENATE result byte INTO result IN BYTE MODE.
+    ENDDO.
+  ENDMETHOD.
+
+  METHOD nested_lists.
+    DATA(innermost) = CONV xstring( '0500' ).
+
+    " the field header and each outer list header: one list element
+    result = repeat( byte = CONV #( '19' ) times = lists ).
+    CONCATENATE result innermost INTO result IN BYTE MODE.
   ENDMETHOD.
 
   METHOD field_headers.
@@ -302,6 +346,29 @@ CLASS ltcl_thrift_reader IMPLEMENTATION.
       CATCH zparq2a_cx_error INTO DATA(error).
         cl_abap_unit_assert=>fail( |nesting at the limit rejected: { error->get_text( ) }| ).
     ENDTRY.
+  ENDMETHOD.
+
+  METHOD nesting_counts_lists.
+    " the outer struct is level 1, so max_depth - 1 lists reach the limit
+    assert_accepted( bytes = nested_lists( zparq2a_cl_thrift_reader=>max_depth - 1 )
+                     msg   = `lists nested to the limit` ).
+    assert_error( bytes = nested_lists( zparq2a_cl_thrift_reader=>max_depth )
+                  msg   = `lists nested too deep` ).
+  ENDMETHOD.
+
+  METHOD nesting_depth_restored.
+    " three fields that each reach the limit: structs, lists, structs;
+    " the second and third pass only if leaving a level counts it down
+    DATA(below) = zparq2a_cl_thrift_reader=>max_depth - 1.
+    DATA(structs) = repeat( byte = CONV #( '1C' ) times = below ).
+    DATA(stops) = repeat( byte = CONV #( '00' ) times = below ).
+    DATA(lists) = repeat( byte = CONV #( '19' ) times = below ).
+    DATA(innermost) = CONV xstring( '05' ).
+    DATA(stop) = CONV xstring( '00' ).
+    DATA bytes TYPE xstring.
+
+    CONCATENATE structs stops lists innermost structs stops stop INTO bytes IN BYTE MODE.
+    assert_accepted( bytes = bytes msg = `siblings at the limit` ).
   ENDMETHOD.
 
 ENDCLASS.
