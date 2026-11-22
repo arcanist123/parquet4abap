@@ -14,7 +14,10 @@
     "ZPARQ2A_CL_BYTES/LTCL_FLOATS/FLOAT_LIMITS": "https://github.com/abaplint/transpiler/issues/2231 (int8 with f operands is calculated as int8)",
     "ZPARQ2A_CL_BYTES/LTCL_FLOATS/FLOAT_SUBNORMALS": "https://github.com/abaplint/transpiler/issues/2231 (int8 with f operands is calculated as int8)",
     "ZPARQ2A_CL_BYTE_READER/LTCL_BYTE_READER/FIXED_WIDTH_VALUES": "https://github.com/abaplint/transpiler/issues/2231 (int8 with f operands is calculated as int8)",
-    "ZPARQ2A_CL_BYTES/LTCL_INTEGERS/REVERSE_BYTES": "https://github.com/abaplint/transpiler/issues/2232 (text literal to xsequence: offsets on characters)"
+    "ZPARQ2A_CL_BYTES/LTCL_INTEGERS/REVERSE_BYTES": "https://github.com/abaplint/transpiler/issues/2232 (text literal to xsequence: offsets on characters)",
+    "ZPARQ2A_CL_THRIFT_READER/LTCL_THRIFT_READER/FIELD_HEADERS": "https://github.com/abaplint/transpiler/issues/2170 (- a - 1 is calculated as - ( a - 1 ))",
+    "ZPARQ2A_CL_THRIFT_READER/LTCL_THRIFT_READER/INTEGERS": "https://github.com/abaplint/transpiler/issues/2170 (- a - 1 is calculated as - ( a - 1 ))",
+    "ZPARQ2A_CL_METADATA/LTCL_GOLDEN_FILES/PAGE_HEADERS_ROUND_TRIP": "https://github.com/abaplint/transpiler/issues/2170 (- a - 1 is calculated as - ( a - 1 )), negative page CRCs"
   },
   "open-steamgate-go": {
     "ZPARQ2A_CL_BIT_READER/LTCL_BIT_READER/WIDTH_OUT_OF_RANGE": "https://github.com/oisee/open-steamgate/issues/540 (method call on NEW x( )->m( ) not compiled)",
@@ -29,6 +32,32 @@
     "ZPARQ2A_CL_BYTES/LTCL_UTF8/ASCII": "https://github.com/oisee/open-steamgate/issues/990 (CL_ABAP_CONV_CODEPAGE local classes not compiled)",
     "ZPARQ2A_CL_BYTES/LTCL_UTF8/MULTI_BYTE": "https://github.com/oisee/open-steamgate/issues/990 (CL_ABAP_CONV_CODEPAGE local classes not compiled)",
     "ZPARQ2A_CL_BYTES/LTCL_UTF8/EMPTY": "https://github.com/oisee/open-steamgate/issues/990 (CL_ABAP_CONV_CODEPAGE local classes not compiled)",
-    "ZPARQ2A_CL_BYTES/LTCL_UTF8/INVALID_BYTES": "https://github.com/oisee/open-steamgate/issues/990 (CL_ABAP_CONV_CODEPAGE local classes not compiled)"
+    "ZPARQ2A_CL_BYTES/LTCL_UTF8/INVALID_BYTES": "https://github.com/oisee/open-steamgate/issues/990 (CL_ABAP_CONV_CODEPAGE local classes not compiled)",
+    "ZPARQ2A_CL_METADATA/LTCL_GOLDEN_FILES/FOOTERS_DECODE": "https://github.com/oisee/open-steamgate/issues/991 (predicative method call as a condition not compiled), also #992, #993",
+    "ZPARQ2A_CL_METADATA/LTCL_GOLDEN_FILES/FOOTERS_ROUND_TRIP": "https://github.com/oisee/open-steamgate/issues/991 (predicative method call as a condition not compiled), also #992, #993",
+    "ZPARQ2A_CL_METADATA/LTCL_GOLDEN_FILES/PAGE_HEADERS_ROUND_TRIP": "https://github.com/oisee/open-steamgate/issues/991 (predicative method call as a condition not compiled), also #992, #989",
+    "ZPARQ2A_CL_METADATA/LTCL_METADATA/MINIMAL_FOOTER": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled), also #991, #993",
+    "ZPARQ2A_CL_METADATA/LTCL_METADATA/UNKNOWN_FIELDS_KEPT": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled), also #991, #993",
+    "ZPARQ2A_CL_METADATA/LTCL_METADATA/LOGICAL_TYPES": "https://github.com/oisee/open-steamgate/issues/993 (LOOP ... REFERENCE INTO not compiled), also #991, #992",
+    "ZPARQ2A_CL_METADATA/LTCL_METADATA/PAGE_HEADER_DEFAULTS": "https://github.com/oisee/open-steamgate/issues/991 (predicative method call as a condition not compiled), also #992",
+    "ZPARQ2A_CL_METADATA/LTCL_METADATA/INVALID_FILES": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled), also #991, #993",
+    "ZPARQ2A_CL_METADATA/LTCL_METADATA/MISSING_REQUIRED_FIELD": "https://github.com/oisee/open-steamgate/issues/991 (predicative method call as a condition not compiled), also #992",
+    "ZPARQ2A_CL_THRIFT_READER/LTCL_THRIFT_READER/FIELD_HEADERS": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled), also #991, #989",
+    "ZPARQ2A_CL_THRIFT_READER/LTCL_THRIFT_READER/BOOLEANS": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled), also #991",
+    "ZPARQ2A_CL_THRIFT_READER/LTCL_THRIFT_READER/INTEGERS": "https://github.com/oisee/open-steamgate/issues/989 (- a - 1 is calculated as - ( a - 1 ))",
+    "ZPARQ2A_CL_THRIFT_READER/LTCL_THRIFT_READER/BINARY_AND_STRING": "https://github.com/oisee/open-steamgate/issues/990 (CL_ABAP_CONV_CODEPAGE local classes not compiled)",
+    "ZPARQ2A_CL_THRIFT_READER/LTCL_THRIFT_READER/LIST_HEADERS": "https://github.com/oisee/open-steamgate/issues/540 (method call on NEW x( )->m( ) not compiled)",
+    "ZPARQ2A_CL_THRIFT_READER/LTCL_THRIFT_READER/UNKNOWN_FIELDS": "https://github.com/oisee/open-steamgate/issues/991 (predicative method call as a condition not compiled), also #992",
+    "ZPARQ2A_CL_THRIFT_READER/LTCL_THRIFT_READER/TYPE_MISMATCH": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled), also #991",
+    "ZPARQ2A_CL_THRIFT_READER/LTCL_THRIFT_READER/UNIONS": "https://github.com/oisee/open-steamgate/issues/991 (predicative method call as a condition not compiled), also #992",
+    "ZPARQ2A_CL_THRIFT_READER/LTCL_THRIFT_READER/REQUIRED_FIELDS": "https://github.com/oisee/open-steamgate/issues/991 (predicative method call as a condition not compiled), also #992",
+    "ZPARQ2A_CL_THRIFT_READER/LTCL_THRIFT_READER/MALFORMED_INPUT": "https://github.com/oisee/open-steamgate/issues/991 (predicative method call as a condition not compiled), also #992",
+    "ZPARQ2A_CL_THRIFT_READER/LTCL_THRIFT_READER/NESTING_LIMIT": "https://github.com/oisee/open-steamgate/issues/991 (predicative method call as a condition not compiled), also #992",
+    "ZPARQ2A_CL_THRIFT_WRITER/LTCL_THRIFT_WRITER/FIELD_HEADERS": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled)",
+    "ZPARQ2A_CL_THRIFT_WRITER/LTCL_THRIFT_WRITER/SCALAR_FIELDS": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled), also #990",
+    "ZPARQ2A_CL_THRIFT_WRITER/LTCL_THRIFT_WRITER/UNIONS": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled)",
+    "ZPARQ2A_CL_THRIFT_WRITER/LTCL_THRIFT_WRITER/UNKNOWN_FIELDS_IN_ORDER": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled)",
+    "ZPARQ2A_CL_THRIFT_WRITER/LTCL_THRIFT_WRITER/ROUND_TRIP": "https://github.com/oisee/open-steamgate/issues/991 (predicative method call as a condition not compiled), also #992",
+    "ZPARQ2A_CL_THRIFT_WRITER/LTCL_THRIFT_WRITER/OUT_OF_RANGE": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled)"
   }
 }
