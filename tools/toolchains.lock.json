@@ -28,7 +28,10 @@
       "tools/osg-windows.patch"
     ],
     "windowsWorkarounds": {
-      "tools/osg-windows.patch": "https://github.com/oisee/open-steamgate/issues/846",
+      "tools/osg-windows.patch": [
+        "https://github.com/oisee/open-steamgate/issues/846",
+        "https://github.com/oisee/open-steamgate/issues/782"
+      ],
       "tools/osg-win-paths.mjs": [
         "https://github.com/oisee/open-steamgate/issues/846",
         "https://github.com/oisee/open-steamgate/issues/987",

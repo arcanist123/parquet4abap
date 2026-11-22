@@ -177,6 +177,20 @@ reported as `KNOWN`. With `--update`, the uncompressed samples that pass go to
 writer gives exactly these bytes, so every toolchain is held to the files that pyarrow and
 DuckDB read correctly.
 
+## Benchmark
+
+`ZPARQ2A_CL_BENCHMARK` generates a table from a seed, writes it, reads it back and times both
+steps. On an ABAP system, the report `ZPARQ2A_BENCHMARK` runs it and prints one line per run.
+`npm run bench` runs it on the toolchains: on the abaplint transpiler with the code `npm run unit`
+built, and on open-steamgate's Go target as a native executable built from the report. It keeps
+each toolchain's file in `results/bench/`, checks it with pyarrow (`tools/bench/check.py`) and
+writes the timings to `results/bench.json`:
+
+```sh
+npm run unit
+npm run bench -- --rows 10000 --runs 7
+```
+
 ## Status
 
 Early development. Expect the API to change.

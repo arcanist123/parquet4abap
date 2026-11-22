@@ -4,7 +4,8 @@
     "ZPARQ2A_CL_WRITER/LTCL_WRITER/CONVERTED_VALUES": "https://github.com/abaplint/transpiler/issues/2167 (arithmetic with p operands loses digits above 2^53)",
     "SAMPLES/flat_none": "https://github.com/abaplint/transpiler/issues/2199 (b and s written as INT32 without a logical type), also #2167 (DECIMAL(31) loses digits)",
     "SAMPLES/empty_none": "https://github.com/abaplint/transpiler/issues/2199 (b and s written as INT32 without a logical type)",
-    "ZPARQ2A_CL_READER/LTCL_READER/VALUES_OUT_OF_RANGE": "https://github.com/abaplint/transpiler/issues/2199 (b and s run as i, so -2^31 into int2 does not overflow)"
+    "ZPARQ2A_CL_READER/LTCL_READER/VALUES_OUT_OF_RANGE": "https://github.com/abaplint/transpiler/issues/2199 (b and s run as i, so -2^31 into int2 does not overflow)",
+    "ZPARQ2A_CL_BENCHMARK/LTCL_BENCHMARK/FIRST_ROWS": "https://github.com/abaplint/transpiler/issues/2250 (int8 / i into a p target drops the fraction)"
   },
   "open-steamgate-go": {
     "ZPARQ2A_CL_BYTE_READER/LTCL_BYTE_READER/ZIGZAG_VARINTS": "https://github.com/oisee/open-steamgate/issues/989 (- a - 1 is calculated as - ( a - 1 ))",
@@ -95,6 +96,10 @@
     "ZPARQ2A_CL_READER/LTCL_READER/MISSING_COLUMN": "https://github.com/oisee/open-steamgate/issues/991 (predicative method call as a condition not compiled)",
     "ZPARQ2A_CL_READER/LTCL_READER/INCOMPATIBLE_TYPES": "https://github.com/oisee/open-steamgate/issues/1009 (DESCRIBE_BY_DATA of a REF TO f component not compiled)",
     "ZPARQ2A_CL_READER/LTCL_READER/VALUES_OUT_OF_RANGE": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled)",
-    "ZPARQ2A_CL_READER/LTCL_READER/UNSUPPORTED_FILES": "https://github.com/oisee/open-steamgate/issues/1009 (DESCRIBE_BY_DATA of a REF TO f component not compiled; the crash follows it)"
+    "ZPARQ2A_CL_READER/LTCL_READER/UNSUPPORTED_FILES": "https://github.com/oisee/open-steamgate/issues/1009 (DESCRIBE_BY_DATA of a REF TO f component not compiled; the crash follows it)",
+    "ZPARQ2A_CL_BENCHMARK/LTCL_BENCHMARK/FIRST_ROWS": "https://github.com/oisee/open-steamgate/issues/1011 (reading through a data reference, ref->*, not compiled)",
+    "ZPARQ2A_CL_BENCHMARK/LTCL_BENCHMARK/ROUND_TRIP": "https://github.com/oisee/open-steamgate/issues/1009 (DESCRIBE_BY_DATA of a REF TO string component not compiled)",
+    "ZPARQ2A_CL_BENCHMARK/LTCL_BENCHMARK/GZIP_ROUND_TRIP": "https://github.com/oisee/open-steamgate/issues/1009 (DESCRIBE_BY_DATA of a REF TO string component not compiled; the crash follows it), also #994",
+    "ZPARQ2A_CL_BENCHMARK/LTCL_BENCHMARK/OTHER_VALUES_FAIL": "https://github.com/oisee/open-steamgate/issues/1011 (reading through a data reference, ref->*, not compiled)"
   }
 }
