@@ -1,0 +1,5 @@
+node_modules/
+output/
+deps/
+tools/open-steamgate/
+results/
