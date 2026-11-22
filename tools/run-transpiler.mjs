@@ -90,6 +90,11 @@ function prepareCheckout(dir) {
   if (!fresh && git("status", "--porcelain", "--untracked-files=no")) {
     throw new SetupError("tools/transpiler has local changes; commit, stash or discard them, or use --local for a working copy");
   }
+  // the lock may move to another repository, e.g. a fork with fixes not merged yet
+  if (!fresh && git("remote", "get-url", "origin") !== lock.repo) {
+    log(`switching origin to ${lock.repo}`);
+    run("git", ["remote", "set-url", "origin", lock.repo], {cwd: dir});
+  }
   if (fresh || git("rev-parse", "HEAD") !== lock.commit) {
     const known = run("git", ["cat-file", "-e", `${lock.commit}^{commit}`], {cwd: dir, capture: true, allowFail: true}).status === 0;
     if (!known) {
