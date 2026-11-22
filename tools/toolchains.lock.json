@@ -1,0 +1,16 @@
+{
+  "open-steamgate": {
+    "repo": "https://github.com/oisee/open-steamgate",
+    "commit": "9d2f0529ea5ac9056d7c49c8f19166d14ad6c36b",
+    "go": "go1.26.0",
+    "patches": ["tools/osg-windows.patch"],
+    "windowsWorkarounds": {
+      "tools/osg-windows.patch": "https://github.com/oisee/open-steamgate/issues/846",
+      "tools/osg-win-paths.mjs": [
+        "https://github.com/oisee/open-steamgate/issues/846",
+        "https://github.com/oisee/open-steamgate/issues/987",
+        "https://github.com/oisee/open-steamgate/issues/988"
+      ]
+    }
+  }
+}

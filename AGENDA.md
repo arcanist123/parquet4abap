@@ -7,8 +7,8 @@ The project has two goals of equal weight:
 1. **A working Parquet library in native ABAP.** Read and write Apache Parquet files from ABAP
    internal tables, in memory, with no external tools, middleware or kernel extensions.
 2. **A reference scenario and demo for ABAP toolchains.** The same source code is built and run
-   on three toolchains: the ABAP platform (installed with abapGit), open-steamgate and the
-   abaplint transpiler. The project reports where each toolchain handles real-world ABAP
+   on four toolchains: the ABAP platform (installed with abapGit), the abaplint transpiler, and
+   open-steamgate's JavaScript and Go paths. The project reports where each toolchain handles real-world ABAP
    correctly, where it falls short, and how fast it runs. It also serves as a worked example of
    taking one non-trivial ABAP code base through each toolchain.
 
@@ -37,19 +37,38 @@ we write can be checked with independent tools such as pyarrow or DuckDB.
 
 | Component | Responsibility |
 |-----------|----------------|
-| `ZCL_PARQUET_BYTES` | Little-endian INT32/INT64, FLOAT/DOUBLE, varint/ZigZag, UTF-8, bit streams (1..32 bits) over `xstring` |
-| `ZCL_PARQUET_THRIFT` | Thrift Compact Protocol for `FileMetaData`, `SchemaElement`, `RowGroup`, `ColumnChunk`, `ColumnMetaData`, `PageHeader` |
-| `ZIF_PARQUET_ENCODER` | `ZCL_PARQUET_ENC_PLAIN`, `ZCL_PARQUET_ENC_RLE` (RLE / bit-packing hybrid for levels and dictionary indices) |
-| `ZIF_PARQUET_COMPRESSOR` | `ZCL_PARQUET_COMP_NONE`, `ZCL_PARQUET_COMP_GZIP`; later pure-ABAP Snappy / ZSTD |
-| `ZCL_PARQUET_SCHEMA` | RTTI mapping of ABAP types (`I`, `INT8`, `P`, `F`, `DECFLOAT34`, `C`, `STRING`, `X`, `XSTRING`, `D`, `T`) to Parquet physical and logical types |
-| `ZCL_PARQUET_WRITER` / `ZCL_PARQUET_READER` | Public in-memory entry points: internal table ↔ Parquet `xstring` |
+| `ZPARQ2A_CL_BYTES` | Little-endian INT32/INT64, FLOAT/DOUBLE, varint/ZigZag, UTF-8, bit streams (1..32 bits) over `xstring` |
+| `ZPARQ2A_CL_THRIFT` | Thrift Compact Protocol for `FileMetaData`, `SchemaElement`, `RowGroup`, `ColumnChunk`, `ColumnMetaData`, `PageHeader` |
+| `ZPARQ2A_IF_ENCODER` | `ZPARQ2A_CL_ENC_PLAIN`, `ZPARQ2A_CL_ENC_RLE` (RLE / bit-packing hybrid for levels and dictionary indices) |
+| `ZPARQ2A_IF_COMPRESSOR` | `ZPARQ2A_CL_COMP_NONE`, `ZPARQ2A_CL_COMP_GZIP`; later pure-ABAP Snappy / ZSTD |
+| `ZPARQ2A_CL_SCHEMA` | RTTI mapping of ABAP types (`I`, `INT8`, `P`, `F`, `DECFLOAT34`, `C`, `STRING`, `X`, `XSTRING`, `D`, `T`) to Parquet physical and logical types |
+| `ZPARQ2A_CL_WRITER` / `ZPARQ2A_CL_READER` | Public in-memory entry points: internal table ↔ Parquet `xstring` |
+
+## Naming conventions (A0)
+
+- **Package:** `$ZPARQ2A`, a local package. abapGit does not write the package name into the
+  serialized files, so an installation can pick another package.
+- **Prefix:** every repository object starts with `ZPARQ2A_`.
+- **Object type marker** after the prefix:
+
+  | Kind | Pattern | Example |
+  |------|---------|---------|
+  | Class | `ZPARQ2A_CL_<name>` | `ZPARQ2A_CL_COMP_NONE` |
+  | Interface | `ZPARQ2A_IF_<name>` | `ZPARQ2A_IF_COMPRESSOR` |
+  | Exception class | `ZPARQ2A_CX_<name>` | `ZPARQ2A_CX_ERROR` |
+  | Program | `ZPARQ2A_<name>` | `ZPARQ2A_BENCHMARK` |
+
+- Global object names are at most 30 characters, which leaves 19 characters after
+  `ZPARQ2A_CL_`.
+- Local classes in includes keep the usual `LCL_`, `LTCL_` and `LIF_` prefixes.
+- abaplint enforces the patterns (`object_naming` in `abaplint.json`).
 
 ## Track A — Parquet library milestones
 
 | # | Milestone | Scope | Done when |
 |---|-----------|-------|-----------|
-| A0 | Skeleton | Packages, interfaces, ABAP Unit setup, abaplint config | Empty test suite builds in every toolchain |
-| A1 | Binary codec | `ZCL_PARQUET_BYTES` incl. bit streams, varint, ZigZag | Unit tests cover edge values (0, -1, min/max INT32/INT64, NaN, ±∞, subnormals) |
+| A0 | Skeleton | Naming conventions (see below), package, interfaces, ABAP Unit setup, abaplint config | Empty test suite builds in every toolchain |
+| A1 | Binary codec | `ZPARQ2A_CL_BYTES` incl. bit streams, varint, ZigZag | Unit tests cover edge values (0, -1, min/max INT32/INT64, NaN, ±∞, subnormals) |
 | A2 | Thrift compact | Encode/decode the metadata structs | Footers of golden files decode, and re-encoding gives the same bytes |
 | A3 | MVP writer | Flat tables, PLAIN, uncompressed + GZIP, optional columns (definition levels) | pyarrow and DuckDB read our output and the values match |
 | A4 | MVP reader | Same scope in reverse | Golden files from pyarrow read into the expected internal tables; round-trip tests pass |
@@ -63,18 +82,26 @@ we write can be checked with independent tools such as pyarrow or DuckDB.
 
 ### Target toolchains
 
-The same library source, with its ABAP Unit tests, must run unchanged on three toolchains:
+The same library source, with its ABAP Unit tests, must run unchanged on four toolchains:
 
 1. **ABAP platform**: the library installed with abapGit
-2. **open-steamgate** ([oisee/open-steamgate](https://github.com/oisee/open-steamgate))
-3. **abaplint transpiler** ([abaplint/transpiler](https://github.com/abaplint/transpiler))
+2. **abaplint transpiler** ([abaplint/transpiler](https://github.com/abaplint/transpiler)), from npm
+3. **open-steamgate, JavaScript path** ([oisee/open-steamgate](https://github.com/oisee/open-steamgate),
+   `npm run osgjs:unit`): its own pinned forks of the transpiler and open-abap-core, so results
+   can differ from toolchain 2
+4. **open-steamgate, Go path** (`npm run osgo:unit`, and `tools/gogen/osabap.mjs` for native
+   executables): ABAP is compiled to Go and built into a native binary
+
+open-steamgate runs on native Windows, without WSL. Until its tooling handles Windows paths
+itself, our runner loads a small preload (`tools/osg-win-paths.mjs`) and applies one patch
+(`tools/osg-windows.patch`). Each one points to the upstream issue it works around.
 
 Each run records the exact version (commit or release tag) of the toolchain it used.
 
 The ABAP platform is the reference for language semantics. Its column in the reports gives the
 *expected* behaviour, based on the ABAP keyword documentation and common experience, and carries
-no benchmark numbers. Measured results and performance figures cover open-steamgate and the
-abaplint transpiler only.
+no benchmark numbers. Measured results and performance figures cover the abaplint transpiler and
+both open-steamgate paths only.
 
 ### What we measure
 
@@ -94,7 +121,11 @@ abaplint transpiler only.
   every toolchain.
 - **Golden corpus:** a versioned set of Parquet files produced with pyarrow and DuckDB, each with
   a JSON description of its expected contents. A generator script makes the corpus reproducible.
-- **Benchmark program:** a fixed ABAP entry point that generates deterministic data (seeded),
+- **Benchmark program:** `bench/zparq2a_benchmark.prog.abap`, a report with parameters for row
+  count, seed and an optional output file. On the Go path it is compiled into a native executable
+  with `osabap.mjs bench/zparq2a_benchmark.prog.abap --lib src`; with an output file it writes the
+  Parquet file through `DATASET`, so pyarrow and DuckDB can check what the Go binary wrote. It is
+  a fixed ABAP entry point that generates deterministic data (seeded),
   writes it, reads it back, and prints timings in a machine-readable format.
 - **Runner scripts:** one script per toolchain (build → test → benchmark) that collect results
   into a common format.

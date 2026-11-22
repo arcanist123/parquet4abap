@@ -1,0 +1,89 @@
+{
+  "global": {
+    "files": "/src/**/*.*",
+    "exclude": [],
+    "noIssues": [],
+    "skipGeneratedGatewayClasses": true,
+    "skipGeneratedPersistentClasses": true,
+    "skipGeneratedFunctionGroups": true
+  },
+  "dependencies": [
+    {
+      "url": "https://github.com/open-abap/open-abap-core",
+      "folder": "/deps",
+      "files": "/src/**/*.*"
+    }
+  ],
+  "syntax": {
+    "version": "v750",
+    "errorNamespace": "^(Z|Y|LCL_|TY_|LIF_|LTCL_)"
+  },
+  "rules": {
+    "begin_end_names": true,
+    "check_ddic": true,
+    "check_include": true,
+    "check_syntax": true,
+    "global_class": true,
+    "implement_methods": true,
+    "method_implemented_twice": true,
+    "parser_error": true,
+    "superclass_final": true,
+    "unknown_types": true,
+    "xml_consistency": true,
+    "unused_variables": true,
+    "unused_types": true,
+    "unused_methods": true,
+    "unreachable_code": true,
+    "avoid_use": {
+      "define": true,
+      "endselect": true,
+      "execSQL": true,
+      "kernelCall": true,
+      "communication": true,
+      "systemCall": true,
+      "break": true,
+      "testSeams": true,
+      "defaultKey": true,
+      "describeLines": true,
+      "exportToMemory": true,
+      "exportToDatabase": true,
+      "statics": true
+    },
+    "keyword_case": true,
+    "indentation": true,
+    "line_length": { "length": 120 },
+    "max_one_statement": true,
+    "contains_tab": true,
+    "whitespace_end": true,
+    "colon_missing_space": true,
+    "space_before_colon": true,
+    "double_space": true,
+    "exporting": true,
+    "functional_writing": true,
+    "use_new": true,
+    "prefer_inline": false,
+    "obsolete_statement": true,
+    "local_variable_names": {
+      "expectedData": "",
+      "expectedConstant": "",
+      "expectedFS": "^<.+>$"
+    },
+    "method_parameter_names": false,
+    "class_attribute_names": false,
+    "object_naming": {
+      "clas": "^ZPARQ2A_C[LX]_",
+      "intf": "^ZPARQ2A_IF_",
+      "prog": "^ZPARQ2A_",
+      "patternKind": "required"
+    },
+    "allowed_object_types": {
+      "allowed": ["CLAS", "INTF", "DEVC", "PROG"]
+    },
+    "definitions_top": true,
+    "empty_statement": true,
+    "preferred_compare_operator": true,
+    "sql_escape_host_variables": true,
+    "cyclomatic_complexity": { "max": 30 },
+    "method_length": { "statements": 100 }
+  }
+}
