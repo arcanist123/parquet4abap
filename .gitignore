@@ -3,6 +3,7 @@ output/
 deps/
 tools/open-steamgate/
 tools/transpiler/
+tools/abaplint/
 results/
 tools/.venv/
 __pycache__/

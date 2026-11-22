@@ -3,15 +3,13 @@
   "private": true,
   "description": "Apache Parquet reader and writer in native ABAP",
   "scripts": {
-    "lint": "abaplint",
+    "lint": "node tools/run-lint.mjs",
     "unit": "node tools/run-transpiler.mjs",
     "unit:local": "node tools/run-transpiler.mjs --local",
     "test": "npm run lint && npm run unit",
     "osg": "node tools/run-osg.mjs",
     "samples": "node tools/write-samples.mjs",
+    "lint:local": "node tools/run-lint.mjs --local",
     "bench": "node tools/run-bench.mjs"
-  },
-  "devDependencies": {
-    "@abaplint/cli": "^2.120.113"
   }
 }

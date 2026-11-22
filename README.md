@@ -120,7 +120,12 @@ The ABAP Unit tests in `src/` run outside an ABAP system on these toolchains:
 | `npm test` | abaplint, then the abaplint transpiler | Node, Git |
 | `npm run osg` | open-steamgate, Go target | Node, Go, Git |
 
-Run `npm install` first. `npm run unit` (part of `npm test`) clones the
+`npm run lint` (part of `npm test`) clones
+[abaplint](https://github.com/abaplint/abaplint) into `tools/abaplint` at the commit
+pinned in `tools/toolchains.lock.json` (the branch `parquet4abap` of the fork
+[arcanist123/abaplint](https://github.com/arcanist123/abaplint/tree/parquet4abap)), builds the CLI
+and lints `src/` with it, so fixes we need apply before they are released on npm.
+`npm run lint:local -- <dir> [--build]` uses another checkout. `npm run unit` clones the
 [abaplint transpiler](https://github.com/abaplint/transpiler) into `tools/transpiler` at the commit
 pinned in `tools/toolchains.lock.json`, builds it, and writes its result to `results/`. While fixes
 we need are still open upstream, the lock points at the branch `parquet4abap` of the fork
