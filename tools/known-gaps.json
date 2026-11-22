@@ -1,12 +1,12 @@
 {
-  "abaplint-transpiler": {},
+  "abaplint-transpiler": {
+    "ZPARQ2A_CL_SCHEMA/LTCL_SCHEMA/FLAT_TYPES": "https://github.com/abaplint/transpiler/issues/2199 (b and s run as i, RTTI gives type kind I)",
+    "ZPARQ2A_CL_SCHEMA/LTCL_SCHEMA/UNSUPPORTED_LINE_TYPES": "https://github.com/open-abap/open-abap-core/issues/1346 (referenced type of REF TO data is not a CL_ABAP_ELEMDESCR)",
+    "ZPARQ2A_CL_WRITER/LTCL_WRITER/CONVERTED_VALUES": "https://github.com/abaplint/transpiler/issues/2167 (arithmetic with p operands loses digits above 2^53)",
+    "SAMPLES/flat_none": "https://github.com/abaplint/transpiler/issues/2199 (b and s written as INT32 without a logical type), also #2167 (DECIMAL(31) loses digits)",
+    "SAMPLES/empty_none": "https://github.com/abaplint/transpiler/issues/2199 (b and s written as INT32 without a logical type)"
+  },
   "open-steamgate-go": {
-    "ZPARQ2A_CL_BIT_READER/LTCL_BIT_READER/WIDTH_OUT_OF_RANGE": "https://github.com/oisee/open-steamgate/issues/540 (method call on NEW x( )->m( ) not compiled)",
-    "ZPARQ2A_CL_BIT_WRITER/LTCL_BIT_WRITER/VALUE_TOO_LARGE": "https://github.com/oisee/open-steamgate/issues/540 (method call on NEW x( )->m( ) not compiled)",
-    "ZPARQ2A_CL_BIT_WRITER/LTCL_BIT_WRITER/NEGATIVE_VALUE": "https://github.com/oisee/open-steamgate/issues/540 (method call on NEW x( )->m( ) not compiled)",
-    "ZPARQ2A_CL_BIT_WRITER/LTCL_BIT_WRITER/WIDTH_OUT_OF_RANGE": "https://github.com/oisee/open-steamgate/issues/540 (method call on NEW x( )->m( ) not compiled)",
-    "ZPARQ2A_CL_BYTE_READER/LTCL_BYTE_READER/INVALID_VARINTS": "https://github.com/oisee/open-steamgate/issues/540 (method call on NEW x( )->m( ) not compiled)",
-    "ZPARQ2A_CL_BYTE_READER/LTCL_BYTE_READER/NEGATIVE_LENGTH": "https://github.com/oisee/open-steamgate/issues/540 (method call on NEW x( )->m( ) not compiled)",
     "ZPARQ2A_CL_BYTE_READER/LTCL_BYTE_READER/ZIGZAG_VARINTS": "https://github.com/oisee/open-steamgate/issues/989 (- a - 1 is calculated as - ( a - 1 ))",
     "ZPARQ2A_CL_BYTE_WRITER/LTCL_BYTE_WRITER/ROUND_TRIP": "https://github.com/oisee/open-steamgate/issues/989 (- a - 1 is calculated as - ( a - 1 ))",
     "ZPARQ2A_CL_BYTES/LTCL_VARINTS/ZIGZAG_EDGE_VALUES": "https://github.com/oisee/open-steamgate/issues/989 (- a - 1 is calculated as - ( a - 1 ))",
@@ -28,7 +28,6 @@
     "ZPARQ2A_CL_THRIFT_READER/LTCL_THRIFT_READER/BOOLEANS": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled), also #991",
     "ZPARQ2A_CL_THRIFT_READER/LTCL_THRIFT_READER/INTEGERS": "https://github.com/oisee/open-steamgate/issues/989 (- a - 1 is calculated as - ( a - 1 ))",
     "ZPARQ2A_CL_THRIFT_READER/LTCL_THRIFT_READER/BINARY_AND_STRING": "https://github.com/oisee/open-steamgate/issues/990 (CL_ABAP_CONV_CODEPAGE local classes not compiled)",
-    "ZPARQ2A_CL_THRIFT_READER/LTCL_THRIFT_READER/LIST_HEADERS": "https://github.com/oisee/open-steamgate/issues/540 (method call on NEW x( )->m( ) not compiled)",
     "ZPARQ2A_CL_THRIFT_READER/LTCL_THRIFT_READER/UNKNOWN_FIELDS": "https://github.com/oisee/open-steamgate/issues/991 (predicative method call as a condition not compiled), also #992",
     "ZPARQ2A_CL_THRIFT_READER/LTCL_THRIFT_READER/TYPE_MISMATCH": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled), also #991",
     "ZPARQ2A_CL_THRIFT_READER/LTCL_THRIFT_READER/UNIONS": "https://github.com/oisee/open-steamgate/issues/991 (predicative method call as a condition not compiled), also #992",
@@ -42,6 +41,27 @@
     "ZPARQ2A_CL_THRIFT_WRITER/LTCL_THRIFT_WRITER/UNIONS": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled)",
     "ZPARQ2A_CL_THRIFT_WRITER/LTCL_THRIFT_WRITER/UNKNOWN_FIELDS_IN_ORDER": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled)",
     "ZPARQ2A_CL_THRIFT_WRITER/LTCL_THRIFT_WRITER/ROUND_TRIP": "https://github.com/oisee/open-steamgate/issues/991 (predicative method call as a condition not compiled), also #992",
-    "ZPARQ2A_CL_THRIFT_WRITER/LTCL_THRIFT_WRITER/OUT_OF_RANGE": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled)"
+    "ZPARQ2A_CL_THRIFT_WRITER/LTCL_THRIFT_WRITER/OUT_OF_RANGE": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled)",
+    "ZPARQ2A_CL_COMP_GZIP/LTCL_COMP_GZIP/CODEC_IS_GZIP": "https://github.com/oisee/open-steamgate/issues/994 (CL_ABAP_GZIP=>COMPRESS_BINARY_WITH_HEADER missing)",
+    "ZPARQ2A_CL_COMP_GZIP/LTCL_COMP_GZIP/ROUND_TRIP": "https://github.com/oisee/open-steamgate/issues/994 (CL_ABAP_GZIP=>COMPRESS_BINARY_WITH_HEADER missing)",
+    "ZPARQ2A_CL_COMP_GZIP/LTCL_COMP_GZIP/GZIP_HEADER": "https://github.com/oisee/open-steamgate/issues/994 (CL_ABAP_GZIP=>COMPRESS_BINARY_WITH_HEADER missing)",
+    "ZPARQ2A_CL_COMP_GZIP/LTCL_COMP_GZIP/EMPTY_INPUT": "https://github.com/oisee/open-steamgate/issues/994 (CL_ABAP_GZIP=>COMPRESS_BINARY_WITH_HEADER missing)",
+    "ZPARQ2A_CL_COMP_GZIP/LTCL_COMP_GZIP/INVALID_INPUT": "https://github.com/oisee/open-steamgate/issues/994 (CL_ABAP_GZIP=>COMPRESS_BINARY_WITH_HEADER missing)",
+    "ZPARQ2A_CL_COMP_GZIP/LTCL_COMP_GZIP/LEVEL_OUT_OF_RANGE": "https://github.com/oisee/open-steamgate/issues/994 (CL_ABAP_GZIP=>COMPRESS_BINARY_WITH_HEADER missing)",
+    "ZPARQ2A_CL_SCHEMA/LTCL_SCHEMA/FLAT_TYPES": "https://github.com/oisee/open-steamgate/issues/1005 (table expression key with a nested component not compiled)",
+    "ZPARQ2A_CL_SCHEMA/LTCL_SCHEMA/DECIMALS": "https://github.com/oisee/open-steamgate/issues/1005 (table expression key with a nested component not compiled)",
+    "ZPARQ2A_CL_SCHEMA/LTCL_SCHEMA/OPTIONAL_COLUMNS": "https://github.com/oisee/open-steamgate/issues/1006 (CONV d( ) as an arithmetic operand not compiled)",
+    "ZPARQ2A_CL_SCHEMA/LTCL_SCHEMA/ROOT_ELEMENT": "https://github.com/oisee/open-steamgate/issues/1006 (CONV d( ) as an arithmetic operand not compiled)",
+    "ZPARQ2A_CL_SCHEMA/LTCL_SCHEMA/INCLUDES_ARE_FLATTENED": "https://github.com/oisee/open-steamgate/issues/998 (VALUE ( FOR ... ) not compiled)",
+    "ZPARQ2A_CL_SCHEMA/LTCL_SCHEMA/UNSUPPORTED_LINE_TYPES": "https://github.com/oisee/open-steamgate/issues/999 (decfloat34 outside the subset)",
+    "ZPARQ2A_CL_WRITER/LTCL_WRITER/FOOTER_DESCRIBES_TABLE": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled)",
+    "ZPARQ2A_CL_WRITER/LTCL_WRITER/CHUNKS_ARE_CONTIGUOUS": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled)",
+    "ZPARQ2A_CL_WRITER/LTCL_WRITER/REQUIRED_VALUES": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled)",
+    "ZPARQ2A_CL_WRITER/LTCL_WRITER/CONVERTED_VALUES": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled)",
+    "ZPARQ2A_CL_WRITER/LTCL_WRITER/EMPTY_TABLE": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled)",
+    "ZPARQ2A_CL_WRITER/LTCL_WRITER/OPTIONAL_VALUES": "https://github.com/oisee/open-steamgate/issues/1006 (CONV d( ) as an arithmetic operand not compiled)",
+    "ZPARQ2A_CL_WRITER/LTCL_WRITER/COMPRESSOR_PER_COLUMN": "https://github.com/oisee/open-steamgate/issues/994 (CL_ABAP_GZIP=>COMPRESS_BINARY_WITH_HEADER missing)",
+    "ZPARQ2A_CL_WRITER/LTCL_WRITER/UNKNOWN_COLUMN_COMPRESSOR": "https://github.com/oisee/open-steamgate/issues/1006 (CONV d( ) as an arithmetic operand not compiled)",
+    "ZPARQ2A_CL_WRITER/LTCL_WRITER/SAME_BYTES_AS_CHECKED_FILES": "https://github.com/oisee/open-steamgate/issues/992 (REF constructor expression not compiled)"
   }
 }

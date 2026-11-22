@@ -105,6 +105,15 @@ open-steamgate runs on native Windows, without WSL. Until its tooling handles Wi
 itself, our runner loads a small preload (`tools/osg-win-paths.mjs`) and applies one patch
 (`tools/osg-windows.patch`). Each one points to the upstream issue it works around.
 
+Upstream fixes go where they get reviewed. The abaplint transpiler and abaplint have merged our
+pull requests, so we keep sending fixes there. Our pull requests to open-steamgate have not been
+merged so far: #848 and #849 date from October 2026 (#849 was closed without a merge), and #1000 to
+#1004 are open. A fix that is not merged has no effect beyond our own fork, so until that changes
+we send no more fix pull requests to open-steamgate and spend that effort elsewhere. We still
+record each gap there as a known failure with a minimal reproduction, and still report it as an
+issue. The lock stays on our fork branch with the fixes already written, and we come back to this
+once upstream review shows that contributing fixes is worthwhile.
+
 Each run records the exact version (commit or release tag) of the toolchain it used.
 
 The ABAP platform is the reference for language semantics. Its column in the reports gives the
