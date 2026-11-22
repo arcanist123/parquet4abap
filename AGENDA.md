@@ -90,7 +90,9 @@ The same library source, with its ABAP Unit tests, must run unchanged on three t
 
 1. **ABAP platform**: the library installed with abapGit
 2. **abaplint transpiler** ([abaplint/transpiler](https://github.com/abaplint/transpiler)), built from
-   its Git repository at a pinned commit, so fixes can be tried before they are released
+   its Git repository at a pinned commit, so fixes can be tried before they are released. A fix we
+   need goes upstream as a pull request; until it is merged, the pinned commit is on a branch of our
+   fork that merges those pull requests into the latest upstream main
 3. **open-steamgate, Go target** ([oisee/open-steamgate](https://github.com/oisee/open-steamgate),
    `npm run osgo:unit`, and `tools/gogen/osabap.mjs` for native executables): ABAP is compiled
    to Go and built into a native binary

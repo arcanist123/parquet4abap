@@ -52,7 +52,11 @@ The ABAP Unit tests in `src/` run outside an ABAP system on these toolchains:
 
 Run `npm install` first. `npm run unit` (part of `npm test`) clones the
 [abaplint transpiler](https://github.com/abaplint/transpiler) into `tools/transpiler` at the commit
-pinned in `tools/toolchains.lock.json`, builds it, and writes its result to `results/`. To try a
+pinned in `tools/toolchains.lock.json`, builds it, and writes its result to `results/`. While fixes
+we need are still open upstream, the lock points at the branch `parquet4abap` of the fork
+[arcanist123/transpiler](https://github.com/arcanist123/transpiler/tree/parquet4abap): the latest
+upstream main with those pull requests merged, listed under `unmergedPullRequests`. Once they are
+merged upstream, the lock goes back to an upstream commit. To try a
 fork or a branch of the transpiler instead, point it at that checkout:
 `npm run unit:local -- <dir>` uses the checkout as it is, and adding `--build` compiles it first.
 Tests listed in `tools/known-gaps.json` fail on a toolchain for a known reason, each with its
