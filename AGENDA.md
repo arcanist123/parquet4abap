@@ -1,5 +1,10 @@
 # parquet4abap — Agenda
 
+> **Archived.** This lab exercise ended after B3 with the decision to write our own ABAP-to-Go
+> compiler, abap2go, see [docs/comparison.md](docs/comparison.md#outcome-our-own-compiler-abap2go).
+> The decision is to be reviewed once abap2go is mature enough to compile this library. The plan
+> below is kept as it stood.
+
 ## Purpose
 
 The project has two goals of equal weight:

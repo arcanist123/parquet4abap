@@ -198,11 +198,15 @@ npm run bench -- --rows 10000 --runs 7
 
 ## Status
 
-Early development. Expect the API to change.
+Archived. parquet4abap was a lab exercise in taking one non-trivial ABAP code base through the
+available toolchains. Its outcome is the decision to write our own ABAP-to-Go compiler, abap2go.
+The decision is to be reviewed once abap2go is mature enough to compile this library. The
+evaluation behind it, with how the abaplint transpiler and open-steamgate's Go target handle this
+code, is in [docs/comparison.md](docs/comparison.md#outcome-our-own-compiler-abap2go).
 
-How the abaplint transpiler and open-steamgate's Go target handle this code so far is in
-[docs/comparison.md](docs/comparison.md).
+The library is left as it was at that point: the reader and writer for flat tables work as
+described above, and the milestones after A4 in [AGENDA.md](AGENDA.md) are not done.
 
 ## License
 
-To be defined.
+[MIT](LICENSE)
