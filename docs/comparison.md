@@ -9,10 +9,39 @@ shows how each one handles that code. The plan behind it, and what each checkpoi
 | [B1](#b1-integers-bit-operators-and-xstring) | A1, binary codec | Integer, bit-operator and `xstring` semantics; first micro-benchmarks | Done; micro-benchmarks pending |
 | [B2](#b2-recursion-and-structures) | A2, Thrift and metadata codec | Recursion, structures | Done |
 | [B3](#b3-oo-dispatch-rtti-dynamic-data-gzip-throughput) | A3/A4, writer and reader | OO dispatch, RTTI, dynamic data, GZIP; first end-to-end throughput numbers | Done; throughput on the transpiler only |
+| [Outcome](#outcome-our-own-compiler-abap2go) | B3 | Which toolchain to build on | Our own ABAP-to-Go compiler, abap2go; to be reviewed once it can compile this library |
 
 OO dispatch moved from B2 to B3. In A2 the metadata codec calls the Thrift reader and writer
 directly, so there is no dynamic dispatch to measure there. A3 adds encoders and compressors that
 are chosen per column, behind interfaces.
+
+## Outcome: our own compiler, abap2go
+
+parquet4abap was a lab exercise: take one non-trivial ABAP code base through the available
+toolchains and see where each one stands. Its outcome is a decision. After B3 we looked at where
+each toolchain is today and where it is heading, and decided to write an ABAP compiler of our own:
+**abap2go**, which compiles ABAP to Go. The rest of this report is the evaluation that led there,
+as it stood at B3.
+
+With that, the exercise is complete and the repository is archived. The decision is to be
+reviewed once abap2go is mature enough to compile this library.
+
+What we weighed:
+
+- **The abaplint transpiler** runs almost all of the library: 175 of 179 tests. But it runs ABAP
+  on JavaScript, and the numbers show what that costs. Reading 10,000 rows takes about 2 s, and
+  three of the four failures come from how the runtime does arithmetic on JavaScript numbers and
+  BigInt (#2167, #2199, #2250). Upstream reviews and merges our fixes, but the execution model is
+  not ours to change.
+- **open-steamgate's Go target** is the direction we want: ABAP compiled to a native binary. Today
+  it passes 86 of 179 tests and doesn't compile the writer's or the reader's main paths, so
+  neither throughput nor dynamic data can be measured on it. Its gaps are constructs an ABAP
+  developer writes every day, and none of our fix pull requests there has been merged, so fixing
+  them ourselves helps only our fork. On native Windows it also needs local workarounds.
+
+Neither gives us a compiled ABAP that runs this library today, and neither is one we can steer
+towards it. abap2go is meant to close that gap. When it can compile the library, the review starts
+from the same ABAP Unit tests, golden corpus and benchmark as this report. B4 and B5 are not run.
 
 ## Toolchains and versions
 

@@ -1,6 +1,7 @@
 {
   "name": "parquet4abap",
   "private": true,
+  "license": "MIT",
   "description": "Apache Parquet reader and writer in native ABAP",
   "scripts": {
     "lint": "node tools/run-lint.mjs",
